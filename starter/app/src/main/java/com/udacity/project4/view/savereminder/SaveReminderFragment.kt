@@ -1,16 +1,17 @@
 package com.udacity.project4.view.savereminder
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.databinding.DataBindingUtil
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.fragment.findNavController
 import com.udacity.project4.R
 import com.udacity.project4.base.BaseFragment
 import com.udacity.project4.base.NavigationCommand
 import com.udacity.project4.databinding.FragmentSaveReminderBinding
 import com.udacity.project4.utils.setDisplayHomeAsUpEnabled
 import com.udacity.project4.viewmodel.SaveReminderViewModel
+import kotlinx.android.synthetic.main.activity_main.*
 import org.koin.android.ext.android.inject
 
 class SaveReminderFragment : BaseFragment() {

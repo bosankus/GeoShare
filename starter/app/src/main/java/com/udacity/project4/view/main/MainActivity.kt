@@ -25,15 +25,15 @@ class MainActivity : AppCompatActivity() {
         authManager = AuthManager(this)
     }
 
-    /*override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             android.R.id.home -> {
-                findNavController().popBackStack()
+                (nav_host_fragment as NavHostFragment).navController.popBackStack()
                 return true
             }
         }
         return super.onOptionsItemSelected(item)
-    }*/
+    }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
