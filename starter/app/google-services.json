@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "645161366828",
+    "project_id": "geoshare-924a3",
+    "storage_bucket": "geoshare-924a3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:645161366828:android:b21c78f91677877437a889",
+        "android_client_info": {
+          "package_name": "com.udacity.project4"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "645161366828-bjjj04p9a2rdd7e7pq2ems419onec34p.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.udacity.project4",
+            "certificate_hash": "43f5c50fd1bea195fe7499d807cc42d1640dbd63"
+          }
+        },
+        {
+          "client_id": "645161366828-no0e28j751e0f35ve7ani9p834vfe6nh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBhyQKbOqqRf0ho06iaNxkCDZvAholPA_0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "645161366828-no0e28j751e0f35ve7ani9p834vfe6nh.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
