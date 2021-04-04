@@ -1,14 +1,15 @@
 package com.udacity.project4.data
 
-import com.udacity.project4.data.dto.ReminderDTO
+import androidx.lifecycle.LiveData
+import com.udacity.project4.data.model.Reminder
 import com.udacity.project4.data.dto.Result
 
 /**
  * Main entry point for accessing reminders data.
  */
 interface ReminderDataSource {
-    suspend fun getReminders(): Result<List<ReminderDTO>>
-    suspend fun saveReminder(reminder: ReminderDTO)
-    suspend fun getReminder(id: String): Result<ReminderDTO>
+    fun getReminders(): LiveData<List<Reminder>>
+    suspend fun saveReminder(reminder: Reminder)
+    suspend fun getReminder(id: String): Result<Reminder>
     suspend fun deleteAllReminders()
 }

@@ -24,14 +24,6 @@ import java.net.URL
 /**
  * Extension function to setup the RecyclerView
  */
-fun <T> RecyclerView.setup(
-    adapter: BaseRecyclerViewAdapter<T>
-) {
-    this.apply {
-        layoutManager = LinearLayoutManager(this.context)
-        this.adapter = adapter
-    }
-}
 
 fun Fragment.setTitle(title: String) {
     if (activity is AppCompatActivity) {

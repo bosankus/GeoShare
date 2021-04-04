@@ -8,7 +8,7 @@ import com.udacity.project4.R
 import com.udacity.project4.base.BaseViewModel
 import com.udacity.project4.base.NavigationCommand
 import com.udacity.project4.data.ReminderDataSource
-import com.udacity.project4.data.dto.ReminderDTO
+import com.udacity.project4.data.model.Reminder
 import com.udacity.project4.view.reminderslist.ReminderDataItem
 import kotlinx.coroutines.launch
 
@@ -49,7 +49,7 @@ class SaveReminderViewModel(val app: Application, val dataSource: ReminderDataSo
         showLoading.value = true
         viewModelScope.launch {
             dataSource.saveReminder(
-                ReminderDTO(
+                Reminder(
                     reminderData.title,
                     reminderData.description,
                     reminderData.location,

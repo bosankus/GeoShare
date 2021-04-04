@@ -4,7 +4,8 @@ import android.view.View
 import androidx.databinding.BindingAdapter
 import androidx.lifecycle.LiveData
 import androidx.recyclerview.widget.RecyclerView
-import com.udacity.project4.base.BaseRecyclerViewAdapter
+import com.udacity.project4.data.model.Reminder
+import com.udacity.project4.view.adapter.ReminderAdapter
 
 
 object BindingAdapters {
@@ -12,7 +13,7 @@ object BindingAdapters {
     /**
      * Use binding adapter to set the recycler view data using livedata object
      */
-    @Suppress("UNCHECKED_CAST")
+    /*@Suppress("UNCHECKED_CAST")
     @BindingAdapter("android:liveData")
     @JvmStatic
     fun <T> setRecyclerViewData(recyclerView: RecyclerView, items: LiveData<List<T>>?) {
@@ -21,6 +22,16 @@ object BindingAdapters {
                 clear()
                 addData(itemList)
             }
+        }
+    }*/
+
+    @BindingAdapter("listData")
+    @JvmStatic
+    fun RecyclerView.bindRecyclerView(list: LiveData<List<Reminder?>>) {
+        list.value.let {
+            val reminderAdapter = ReminderAdapter()
+            this.adapter = reminderAdapter
+            reminderAdapter.submitList(it)
         }
     }
 
@@ -42,6 +53,15 @@ object BindingAdapters {
                 if (view.visibility == View.VISIBLE)
                     view.fadeOut()
             }
+        }
+    }
+
+    @BindingAdapter("isLoading")
+    @JvmStatic
+    fun View.bindLoadingState(size: Int) {
+        this.visibility = when (size) {
+            0 -> View.VISIBLE
+            else -> View.GONE
         }
     }
 }

@@ -3,17 +3,16 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:theme="@style/SplashFragmentTheme">
+        android:layout_height="match_parent">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:textStyle="bold"
             android:text="@string/welcome_to_the_location_reminder_app"
             android:textColor="@color/black"
-            android:textSize="@dimen/text_size_large" />
+            android:textSize="@dimen/text_size_large"
+            android:textStyle="bold" />
 
     </RelativeLayout>
 </layout>

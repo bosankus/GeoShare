@@ -6,11 +6,11 @@
     <data>
         <!--Data item that holds the reminder details-->
         <variable
-            name="reminderDataItem"
-            type="com.udacity.project4.view.reminderslist.ReminderDataItem" />
+            name="reminderItem"
+            type="com.udacity.project4.data.model.Reminder" />
     </data>
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
@@ -18,16 +18,60 @@
         tools:context="com.udacity.project4.view.reminderdetails.FragmentReminderDetails">
         <!--TODO: add the design of the reminder details-->
 
-        <TextView
-            android:layout_width="match_parent"
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/reminder_details_guidelines"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="Reminder Details"
-            android:textSize="@dimen/text_size_large"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:orientation="vertical"
+            app:layout_constraintGuide_begin="150dp" />
 
-    </LinearLayout>
+        <TextView
+            android:id="@+id/reminder_details_title_header"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/gap_16dp"
+            android:text="@string/reminder_title"
+            android:textSize="@dimen/text_16sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/reminder_details_title"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/reminder_details_title" />
+
+        <TextView
+            android:id="@+id/reminder_details_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/gap_16dp"
+            android:text="@={reminderItem.title}"
+            android:textSize="@dimen/text_16sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/reminder_details_guidelines"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="Autofill" />
+
+        <TextView
+            android:id="@+id/reminder_details_desc_header"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/gap_16dp"
+            android:text="@string/reminder_desc"
+            android:textSize="@dimen/text_16sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/reminder_details_desc"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/reminder_details_desc" />
+
+        <TextView
+            android:id="@+id/reminder_details_desc"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/gap_16dp"
+            android:text="@={reminderItem.description}"
+            android:textSize="@dimen/text_16sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/reminder_details_guidelines"
+            app:layout_constraintTop_toBottomOf="@+id/reminder_details_title"
+            tools:ignore="Autofill" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

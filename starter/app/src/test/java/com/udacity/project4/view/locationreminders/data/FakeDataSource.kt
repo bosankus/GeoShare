@@ -9,7 +9,7 @@ class FakeDataSource : ReminderDataSource {
 
 //    TODO: Create a fake data source to act as a double to the real data source
 
-    override suspend fun getReminders(): Result<List<ReminderDTO>> {
+    override fun getReminders(): Result<List<ReminderDTO>> {
         TODO("Return the reminders")
     }
 

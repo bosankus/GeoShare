@@ -1,8 +1,10 @@
-package com.udacity.project4.data.dto
+package com.udacity.project4.data.model
 
+import android.os.Parcelable
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import kotlinx.android.parcel.Parcelize
 import java.util.*
 
 /**
@@ -17,11 +19,12 @@ import java.util.*
  */
 
 @Entity(tableName = "reminders")
-data class ReminderDTO(
+@Parcelize
+data class Reminder(
     @ColumnInfo(name = "title") var title: String?,
     @ColumnInfo(name = "description") var description: String?,
     @ColumnInfo(name = "location") var location: String?,
     @ColumnInfo(name = "latitude") var latitude: Double?,
     @ColumnInfo(name = "longitude") var longitude: Double?,
     @PrimaryKey @ColumnInfo(name = "entry_id") val id: String = UUID.randomUUID().toString()
-)
+): Parcelable
