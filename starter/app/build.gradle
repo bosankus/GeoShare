@@ -139,6 +139,5 @@ dependencies {
     implementation 'com.github.quickpermissions:quickpermissions-kotlin:0.4.0'
 
 
-
 }
 apply plugin: 'com.google.gms.google-services'

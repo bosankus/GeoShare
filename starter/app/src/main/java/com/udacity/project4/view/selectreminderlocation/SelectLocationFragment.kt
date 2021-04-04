@@ -1,6 +1,5 @@
 package com.udacity.project4.view.selectreminderlocation
 
-
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.*
