@@ -1,6 +1,7 @@
 package com.udacity.project4
 
 import android.app.Application
+import com.google.firebase.FirebaseApp
 import com.udacity.project4.data.ReminderDataSource
 import com.udacity.project4.data.local.LocalDB
 import com.udacity.project4.data.local.RemindersLocalRepository
@@ -15,7 +16,7 @@ class MyApp : Application() {
 
     override fun onCreate() {
         super.onCreate()
-
+        FirebaseApp.initializeApp(this)
         /**
          * use Koin Library as a service locator
          */
@@ -35,7 +36,7 @@ class MyApp : Application() {
                     get() as ReminderDataSource
                 )
             }
-            single { RemindersLocalRepository(get()) as ReminderDataSource }
+            single { RemindersLocalRepository(get()) }
             single { LocalDB.createRemindersDao(this@MyApp) }
         }
 

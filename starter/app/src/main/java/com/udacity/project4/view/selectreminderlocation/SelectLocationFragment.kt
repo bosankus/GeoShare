@@ -1,21 +1,30 @@
 package com.udacity.project4.view.selectreminderlocation
 
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.*
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
+import com.google.android.libraries.maps.CameraUpdateFactory
+import com.google.android.libraries.maps.GoogleMap
+import com.google.android.libraries.maps.OnMapReadyCallback
+import com.google.android.libraries.maps.model.BitmapDescriptorFactory
+import com.google.android.libraries.maps.model.LatLng
+import com.google.android.libraries.maps.model.MapStyleOptions.loadRawResourceStyle
+import com.google.android.libraries.maps.model.MarkerOptions
+import com.livinglifetechway.quickpermissions_kotlin.runWithPermissions
 import com.udacity.project4.R
-import com.udacity.project4.base.BaseFragment
 import com.udacity.project4.databinding.FragmentSelectLocationBinding
-import com.udacity.project4.viewmodel.SaveReminderViewModel
+import com.udacity.project4.utils.COARSE_LOCATION
+import com.udacity.project4.utils.FINE_LOCATION
 import com.udacity.project4.utils.setDisplayHomeAsUpEnabled
-import org.koin.android.ext.android.inject
+import java.util.*
 
-class SelectLocationFragment : BaseFragment() {
+class SelectLocationFragment : Fragment(), OnMapReadyCallback {
 
-    //Use Koin to get the view model of the SaveReminder
-    override val _viewModel: SaveReminderViewModel by inject()
-    private lateinit var binding: FragmentSelectLocationBinding
+    private var binding: FragmentSelectLocationBinding? = null
+    private var map: GoogleMap? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -23,28 +32,79 @@ class SelectLocationFragment : BaseFragment() {
         binding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_select_location, container, false)
 
-        binding.viewModel = _viewModel
-        binding.lifecycleOwner = this
+        return binding?.apply {
+            lifecycleOwner = viewLifecycleOwner
+            mapView.onCreate(savedInstanceState)
+            setHasOptionsMenu(true)
+            setDisplayHomeAsUpEnabled(true)
+            onLocationSelected()
+        }?.root
 
-        setHasOptionsMenu(true)
-        setDisplayHomeAsUpEnabled(true)
-
-//        TODO: add the map setup implementation
-//        TODO: zoom to the user location after taking his permission
-//        TODO: add style to the map
-//        TODO: put a marker to location that the user selected
+    }
 
 
-//        TODO: call this function after the user confirms on the selected location
-        onLocationSelected()
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-        return binding.root
+        binding?.mapView?.getMapAsync(this)
     }
 
     private fun onLocationSelected() {
         //        TODO: When the user confirms on the selected location,
         //         send back the selected location details to the view model
         //         and navigate back to the previous fragment to save the reminder and add the geofence
+    }
+
+    override fun onMapReady(googleMap: GoogleMap?) {
+        this.map = googleMap
+        val homeLatLng = LatLng(22.667230, 88.401310)
+        val zoomLevel = 15f
+        val style = loadRawResourceStyle(requireContext(), R.raw.style_json)
+        map?.setMapStyle(style)
+        map?.apply {
+            moveCamera(CameraUpdateFactory.newLatLngZoom(homeLatLng, zoomLevel))
+            addMarker(MarkerOptions().position(homeLatLng))
+            setMapLongClick(this)
+            setPoiClick(this)
+            enableCurrentLocation()
+        }
+
+    }
+
+    private fun setMapLongClick(map: GoogleMap) {
+        map.setOnMapLongClickListener {
+            val snippet = String.format(
+                Locale.getDefault(),
+                "Lat: %1$.5f, Long: %2$.5f",
+                it.latitude,
+                it.longitude
+            )
+            map.addMarker(
+                MarkerOptions()
+                    .position(it)
+                    .title("Selected location")
+                    .snippet(snippet)
+                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ROSE))
+            )
+        }
+    }
+
+    private fun setPoiClick(map: GoogleMap) {
+        map.setOnPoiClickListener {
+            val poiMarker = map.addMarker(
+                MarkerOptions()
+                    .position(it.latLng)
+                    .title(it.name)
+            )
+            poiMarker.showInfoWindow()
+        }
+    }
+
+
+    @SuppressLint("MissingPermission")
+    // Permissions are already being checked
+    private fun enableCurrentLocation() = runWithPermissions(FINE_LOCATION, COARSE_LOCATION) {
+        map?.isMyLocationEnabled = true
     }
 
 
@@ -55,19 +115,51 @@ class SelectLocationFragment : BaseFragment() {
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
         // TODO: Change the map type based on the user's selection.
         R.id.normal_map -> {
+            map?.mapType = GoogleMap.MAP_TYPE_NORMAL
             true
         }
         R.id.hybrid_map -> {
+            map?.mapType = GoogleMap.MAP_TYPE_HYBRID
             true
         }
         R.id.satellite_map -> {
+            map?.mapType = GoogleMap.MAP_TYPE_SATELLITE
             true
         }
         R.id.terrain_map -> {
+            map?.mapType = GoogleMap.MAP_TYPE_TERRAIN
             true
         }
         else -> super.onOptionsItemSelected(item)
     }
 
+    override fun onResume() {
+        super.onResume()
+        binding?.mapView?.onResume()
+    }
 
+    override fun onStart() {
+        super.onStart()
+        binding?.mapView?.onStart()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        binding?.mapView?.onStop()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        binding?.mapView?.onPause()
+    }
+
+    override fun onLowMemory() {
+        super.onLowMemory()
+        binding?.mapView?.onLowMemory()
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        binding?.mapView?.onSaveInstanceState(outState)
+    }
 }
