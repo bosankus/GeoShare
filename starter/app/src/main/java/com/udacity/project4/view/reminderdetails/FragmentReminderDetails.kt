@@ -42,7 +42,7 @@ class FragmentReminderDetails : Fragment() {
         private const val EXTRA_ReminderDataItem = "EXTRA_ReminderDataItem"
 
 
-        // receive the reminder object after the user clicks on the notification
+        // receive the reminder object after the user clicks on the notificatio
         fun newIntent(context: Context, reminderDataItem: ReminderDataItem): Intent {
             val intent = Intent(context, FragmentReminderDetails::class.java)
             intent.putExtra(EXTRA_ReminderDataItem, reminderDataItem)
