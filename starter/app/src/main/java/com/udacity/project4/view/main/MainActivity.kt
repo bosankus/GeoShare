@@ -7,10 +7,13 @@ import androidx.navigation.findNavController
 import com.udacity.project4.R
 import com.udacity.project4.utils.AuthManager
 import com.udacity.project4.utils.showSnack
+import dagger.hilt.android.AndroidEntryPoint
 
 /**
  * The RemindersActivity that holds the reminders fragments
  */
+
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     private lateinit var authManager: AuthManager

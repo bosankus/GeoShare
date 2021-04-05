@@ -44,15 +44,16 @@ class SelectLocationFragment : Fragment(), OnMapReadyCallback {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         binding?.mapView?.getMapAsync(this)
     }
+
 
     private fun onLocationSelected() {
         //        TODO: When the user confirms on the selected location,
         //         send back the selected location details to the view model
         //         and navigate back to the previous fragment to save the reminder and add the geofence
     }
+
 
     override fun onMapReady(googleMap: GoogleMap?) {
         this.map = googleMap
@@ -67,8 +68,8 @@ class SelectLocationFragment : Fragment(), OnMapReadyCallback {
             setPoiClick(this)
             enableCurrentLocation()
         }
-
     }
+
 
     private fun setMapLongClick(map: GoogleMap) {
         map.setOnMapLongClickListener {
@@ -87,6 +88,7 @@ class SelectLocationFragment : Fragment(), OnMapReadyCallback {
             )
         }
     }
+
 
     private fun setPoiClick(map: GoogleMap) {
         map.setOnPoiClickListener {

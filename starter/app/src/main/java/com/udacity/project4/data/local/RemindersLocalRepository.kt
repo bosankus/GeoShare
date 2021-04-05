@@ -13,10 +13,7 @@ import kotlinx.coroutines.*
  * @param remindersDao the dao that does the Room db operations
  * @param ioDispatcher a coroutine dispatcher to offload the blocking IO tasks
  */
-class RemindersLocalRepository(
-    private val remindersDao: RemindersDao,
-    private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
-) : ReminderDataSource {
+class RemindersLocalRepository(private val remindersDao: RemindersDao) : ReminderDataSource {
 
     /**
      * Get the reminders list from the local db
@@ -29,7 +26,7 @@ class RemindersLocalRepository(
      * @param reminder the reminder to be inserted
      */
     override suspend fun saveReminder(reminder: Reminder) =
-        withContext(ioDispatcher) {
+        withContext(Dispatchers.IO) {
             remindersDao.saveReminder(reminder)
         }
 
@@ -38,7 +35,7 @@ class RemindersLocalRepository(
      * @param id to be used to get the reminder
      * @return Result the holds a Success object with the Reminder or an Error object with the error message
      */
-    override suspend fun getReminder(id: String): Result<Reminder> = withContext(ioDispatcher) {
+    override suspend fun getReminder(id: String): Result<Reminder> = withContext(Dispatchers.IO) {
         try {
             val reminder = remindersDao.getReminderById(id)
             if (reminder != null) {
@@ -55,7 +52,7 @@ class RemindersLocalRepository(
      * Deletes all the reminders in the db
      */
     override suspend fun deleteAllReminders() {
-        withContext(ioDispatcher) {
+        withContext(Dispatchers.IO) {
             remindersDao.deleteAllReminders()
         }
     }

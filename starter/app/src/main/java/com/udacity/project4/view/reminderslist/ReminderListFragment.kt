@@ -5,16 +5,18 @@ import android.view.*
 import androidx.activity.addCallback
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.udacity.project4.R
 import com.udacity.project4.databinding.FragmentRemindersBinding
 import com.udacity.project4.utils.*
 import com.udacity.project4.viewmodel.RemindersListViewModel
-import org.koin.androidx.viewmodel.ext.android.viewModel
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class ReminderListFragment : Fragment() {
 
-    private val _viewModel: RemindersListViewModel by viewModel()
+    val _viewModel: RemindersListViewModel by viewModels()
     private var binding: FragmentRemindersBinding? = null
     private lateinit var authManager: AuthManager
 

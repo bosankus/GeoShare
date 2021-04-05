@@ -6,16 +6,18 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.udacity.project4.R
 import com.udacity.project4.databinding.FragmentSaveReminderBinding
 import com.udacity.project4.utils.setDisplayHomeAsUpEnabled
 import com.udacity.project4.viewmodel.SaveReminderViewModel
-import org.koin.android.ext.android.inject
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class SaveReminderFragment : Fragment() {
 
-    private val _viewModel: SaveReminderViewModel by inject()
+    private val _viewModel: SaveReminderViewModel by viewModels()
     private var binding: FragmentSaveReminderBinding? = null
 
     override fun onCreateView(

@@ -9,6 +9,8 @@ Author: Ankush Bose
 Date: 05,April,2021
  **/
 
+const val REMINDER_DATABASE_NAME = "reminder_db"
+
 const val ANDROID_10 = Build.VERSION_CODES.Q
 
 const val FINE_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION
