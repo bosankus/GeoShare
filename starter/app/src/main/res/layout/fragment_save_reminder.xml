@@ -8,6 +8,10 @@
         <variable
             name="viewModel"
             type="com.udacity.project4.viewmodel.SaveReminderViewModel" />
+
+        <variable
+            name="locationName"
+            type="String" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -56,7 +60,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/margin_normal"
-            android:text="@{viewModel.reminderSelectedLocationStr}"
+            android:text="@{locationName}"
             android:textColor="@color/black"
             app:layout_constraintBottom_toBottomOf="@id/selectLocation"
             app:layout_constraintEnd_toEndOf="parent"
@@ -73,7 +77,8 @@
             app:fabSize="normal"
             app:layout_anchorGravity="bottom|right|end"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintEnd_toEndOf="parent"
+            android:contentDescription="@string/select_location" />
 
         <ProgressBar
             android:id="@+id/progressBar"

@@ -31,12 +31,29 @@
         <action
             android:id="@+id/action_saveReminderFragment_to_selectLocationFragment"
             app:destination="@id/selectLocationFragment" />
+        <argument android:name="selectedLatitude"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue=" " />
+        <argument android:name="selectedLongitute"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue=" " />
+        <argument
+            android:name="selectedLocationName"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue=" " />
     </fragment>
     <fragment
         android:id="@+id/selectLocationFragment"
         android:name="com.udacity.project4.view.selectreminderlocation.SelectLocationFragment"
         android:label="Select Location"
-        tools:layout="@layout/fragment_select_location" />
+        tools:layout="@layout/fragment_select_location" >
+        <action
+            android:id="@+id/action_selectLocationFragment_to_saveReminderFragment"
+            app:destination="@id/saveReminderFragment" />
+    </fragment>
     <fragment
         android:id="@+id/authenticationFragment"
         android:name="com.udacity.project4.view.auth.AuthFragment"

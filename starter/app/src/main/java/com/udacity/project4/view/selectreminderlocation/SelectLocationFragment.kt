@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.*
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.google.android.libraries.maps.CameraUpdateFactory
 import com.google.android.libraries.maps.GoogleMap
 import com.google.android.libraries.maps.OnMapReadyCallback
@@ -18,12 +19,16 @@ import com.udacity.project4.databinding.FragmentSelectLocationBinding
 import com.udacity.project4.utils.COARSE_LOCATION
 import com.udacity.project4.utils.FINE_LOCATION
 import com.udacity.project4.utils.setDisplayHomeAsUpEnabled
+import com.udacity.project4.utils.showSnack
 import java.util.*
 
 class SelectLocationFragment : Fragment(), OnMapReadyCallback {
 
     private var binding: FragmentSelectLocationBinding? = null
     private var map: GoogleMap? = null
+    private var locationName: String = ""
+    private var latitude: Double? = null
+    private var longitude: Double? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -44,9 +49,25 @@ class SelectLocationFragment : Fragment(), OnMapReadyCallback {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         binding?.mapView?.getMapAsync(this)
+        setOnClickListener()
     }
 
+    private fun setOnClickListener() {
+        binding?.selectLocation?.setOnClickListener {
+            if (latitude != null && longitude != null && locationName.isNotEmpty()) {
+                val action =
+                    SelectLocationFragmentDirections
+                        .actionSelectLocationFragmentToSaveReminderFragment(
+                            latitude.toString(),
+                            longitude.toString(),
+                            locationName
+                        )
+                findNavController().navigate(action)
+            } else showSnack(requireView(), "Please select a location")
+        }
+    }
 
     private fun onLocationSelected() {
         //        TODO: When the user confirms on the selected location,
@@ -66,37 +87,47 @@ class SelectLocationFragment : Fragment(), OnMapReadyCallback {
             addMarker(MarkerOptions().position(homeLatLng))
             setMapLongClick(this)
             setPoiClick(this)
-            enableCurrentLocation()
+            enableCurrentLocationAndGeoFencing()
         }
     }
 
 
     private fun setMapLongClick(map: GoogleMap) {
-        map.setOnMapLongClickListener {
+        map.setOnMapClickListener {
+            latitude = it.latitude
+            longitude = it.longitude
+            locationName = "lat: $latitude, long: $longitude"
+            showSnack(requireView(), locationName)
             val snippet = String.format(
                 Locale.getDefault(),
                 "Lat: %1$.5f, Long: %2$.5f",
                 it.latitude,
                 it.longitude
             )
-            map.addMarker(
-                MarkerOptions()
-                    .position(it)
-                    .title("Selected location")
-                    .snippet(snippet)
-                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ROSE))
-            )
+            map.apply { clear() }
+                .addMarker(
+                    MarkerOptions()
+                        .position(it)
+                        .title("Selected location")
+                        .snippet(snippet)
+                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ROSE))
+                )
         }
     }
 
 
     private fun setPoiClick(map: GoogleMap) {
         map.setOnPoiClickListener {
-            val poiMarker = map.addMarker(
-                MarkerOptions()
-                    .position(it.latLng)
-                    .title(it.name)
-            )
+            latitude = it.latLng.latitude
+            longitude = it.latLng.longitude
+            locationName = String.format(Locale.ENGLISH, it.name)
+            showSnack(requireView(), locationName)
+            val poiMarker = map.apply { clear() }
+                .addMarker(
+                    MarkerOptions()
+                        .position(it.latLng)
+                        .title(it.name)
+                )
             poiMarker.showInfoWindow()
         }
     }
@@ -104,8 +135,23 @@ class SelectLocationFragment : Fragment(), OnMapReadyCallback {
 
     @SuppressLint("MissingPermission")
     // Permissions are already being checked
-    private fun enableCurrentLocation() = runWithPermissions(FINE_LOCATION, COARSE_LOCATION) {
-        map?.isMyLocationEnabled = true
+    private fun enableCurrentLocationAndGeoFencing() {
+        runWithPermissions(FINE_LOCATION, COARSE_LOCATION) {
+            map?.isMyLocationEnabled = true
+        }
+        /*if (Build.VERSION.SDK_INT > ANDROID_10) runWithPermissions(BACKGROUND_LOCATION) {
+            // enable geo fencing
+            */
+        /**
+         * so basically we have to get the selected location by the user and get the
+         * lat, lang of the place.
+         * using safe args we will share the lat,lang to SaveReminderFragment.
+         * in the same fragment, using lat,lang geofencing will be created
+         *//*
+
+        }
+        else {//enable geofencing
+        }*/
     }
 
 
