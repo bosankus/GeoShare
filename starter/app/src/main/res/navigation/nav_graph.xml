@@ -32,13 +32,9 @@
             android:id="@+id/action_saveReminderFragment_to_selectLocationFragment"
             app:destination="@id/selectLocationFragment" />
         <argument android:name="selectedLatitude"
-            app:argType="string"
-            app:nullable="true"
-            android:defaultValue=" " />
+            android:defaultValue="0" />
         <argument android:name="selectedLongitute"
-            app:argType="string"
-            app:nullable="true"
-            android:defaultValue=" " />
+            android:defaultValue="0" />
         <argument
             android:name="selectedLocationName"
             app:argType="string"
