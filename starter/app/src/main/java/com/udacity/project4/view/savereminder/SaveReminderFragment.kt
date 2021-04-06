@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.addCallback
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -61,26 +62,45 @@ class SaveReminderFragment : Fragment() {
                 findNavController()
                     .navigate(R.id.action_saveReminderFragment_to_selectLocationFragment)
             }
-
             saveReminder.setOnClickListener {
-                val title = binding?.reminderTitle?.text.toString()
-                val description = binding?.reminderDescription?.text.toString()
-                val location = selectedLocationName
-                val latitude = selectedLatitude.toDouble()
-                val longitude = selectedLongitude.toDouble()
-                val reminder = ReminderDataItem(title, description, location, latitude, longitude)
-                _viewModel.validateAndSaveReminder(reminder)
-//            TODO: use the user entered reminder details to:
-//             1) add a geofencing request
-//             2) save the reminder to the local db
+                saveReminderData()
+                startGeoFencing()
             }
+
+            requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
+                goToReminderList()
+            }
+
+//            TODO: use the user entered reminder details to:
+//             1) add a geofencing request - done
+//             2) save the reminder to the local db
         }
+    }
+
+    private fun startGeoFencing() {
+
+    }
+
+
+    private fun saveReminderData() {
+        val title = binding?.reminderTitle?.text.toString()
+        val description = binding?.reminderDescription?.text.toString()
+        val location = selectedLocationName
+        val latitude = selectedLatitude.toDouble()
+        val longitude = selectedLongitude.toDouble()
+        val reminder = ReminderDataItem(title, description, location, latitude, longitude)
+        _viewModel.validateAndSaveReminder(reminder)
+        goToReminderList()
     }
 
     private fun setObserver() {
         _viewModel.showMessage.observe(viewLifecycleOwner, { message ->
             message?.let { showSnack(requireView(), it) }
         })
+    }
+
+    private fun goToReminderList() {
+        findNavController().navigate(R.id.action_saveReminderFragment_to_reminderListFragment)
     }
 
     override fun onDestroy() {

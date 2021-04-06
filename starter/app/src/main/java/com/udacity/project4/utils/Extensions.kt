@@ -47,6 +47,5 @@ fun View.fadeOut() {
     })
 }
 
-fun showSnack(view: View, message: String) {
+fun showSnack(view: View, message: String) =
     Snackbar.make(view, message, Snackbar.LENGTH_LONG).show()
-}

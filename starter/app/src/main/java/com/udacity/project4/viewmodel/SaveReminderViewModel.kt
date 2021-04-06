@@ -37,7 +37,7 @@ class SaveReminderViewModel @Inject constructor(
     fun validateAndSaveReminder(reminderData: ReminderDataItem) {
         if (validateEnteredData(reminderData)) {
             saveReminder(reminderData)
-        } else _showMessage.value = "Invalid data"
+        }
     }
 
 
