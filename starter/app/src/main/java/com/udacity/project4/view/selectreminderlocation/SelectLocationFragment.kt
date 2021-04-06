@@ -205,6 +205,11 @@ class SelectLocationFragment : Fragment(), OnMapReadyCallback {
         binding?.mapView?.onLowMemory()
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        binding = null
+    }
+
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         binding?.mapView?.onSaveInstanceState(outState)

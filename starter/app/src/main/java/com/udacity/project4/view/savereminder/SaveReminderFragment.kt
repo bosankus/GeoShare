@@ -24,7 +24,7 @@ class SaveReminderFragment : Fragment() {
 
     private var selectedLocationName: String = ""
     private var selectedLatitude: Int = 0
-    private var selectedLongitute: Int = 0
+    private var selectedLongitude: Int = 0
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -35,7 +35,7 @@ class SaveReminderFragment : Fragment() {
             DataBindingUtil.inflate(inflater, R.layout.fragment_save_reminder, container, false)
         selectedLatitude =
             SaveReminderFragmentArgs.fromBundle(requireArguments()).selectedLatitude
-        selectedLongitute =
+        selectedLongitude =
             SaveReminderFragmentArgs.fromBundle(requireArguments()).selectedLongitute
         selectedLocationName =
             SaveReminderFragmentArgs.fromBundle(requireArguments()).selectedLocationName.toString()
@@ -67,7 +67,7 @@ class SaveReminderFragment : Fragment() {
                 val description = binding?.reminderDescription?.text.toString()
                 val location = selectedLocationName
                 val latitude = selectedLatitude.toDouble()
-                val longitude = selectedLongitute.toDouble()
+                val longitude = selectedLongitude.toDouble()
                 val reminder = ReminderDataItem(title, description, location, latitude, longitude)
                 _viewModel.validateAndSaveReminder(reminder)
 //            TODO: use the user entered reminder details to:
@@ -78,7 +78,6 @@ class SaveReminderFragment : Fragment() {
     }
 
     private fun setObserver() {
-        // set error observer from viewmodel
         _viewModel.showMessage.observe(viewLifecycleOwner, { message ->
             message?.let { showSnack(requireView(), it) }
         })
@@ -86,7 +85,6 @@ class SaveReminderFragment : Fragment() {
 
     override fun onDestroy() {
         super.onDestroy()
-        //make sure to clear the view model after destroy, as it's a single view model.
-        _viewModel.onClear()
+        binding = null
     }
 }
