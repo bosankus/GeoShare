@@ -1,6 +1,7 @@
 package com.udacity.project4.view.selectreminderlocation
 
 import android.annotation.SuppressLint
+import android.os.Build
 import android.os.Bundle
 import android.view.*
 import androidx.databinding.DataBindingUtil
@@ -16,10 +17,7 @@ import com.google.android.libraries.maps.model.MarkerOptions
 import com.livinglifetechway.quickpermissions_kotlin.runWithPermissions
 import com.udacity.project4.R
 import com.udacity.project4.databinding.FragmentSelectLocationBinding
-import com.udacity.project4.utils.COARSE_LOCATION
-import com.udacity.project4.utils.FINE_LOCATION
-import com.udacity.project4.utils.setDisplayHomeAsUpEnabled
-import com.udacity.project4.utils.showSnack
+import com.udacity.project4.utils.*
 import java.util.*
 
 class SelectLocationFragment : Fragment(), OnMapReadyCallback {
@@ -136,22 +134,11 @@ class SelectLocationFragment : Fragment(), OnMapReadyCallback {
     @SuppressLint("MissingPermission")
     // Permissions are already being checked
     private fun enableCurrentLocationAndGeoFencing() {
-        runWithPermissions(FINE_LOCATION, COARSE_LOCATION) {
-            map?.isMyLocationEnabled = true
-        }
-        /*if (Build.VERSION.SDK_INT > ANDROID_10) runWithPermissions(BACKGROUND_LOCATION) {
-            // enable geo fencing
-            */
-        /**
-         * so basically we have to get the selected location by the user and get the
-         * lat, lang of the place.
-         * using safe args we will share the lat,lang to SaveReminderFragment.
-         * in the same fragment, using lat,lang geofencing will be created
-         *//*
-
-        }
-        else {//enable geofencing
-        }*/
+        if (Build.VERSION.SDK_INT >= ANDROID_10)
+            requireActivity().runWithPermissions(FINE_LOCATION, COARSE_LOCATION) {
+                map?.isMyLocationEnabled = true
+            }
+        else map?.isMyLocationEnabled = true
     }
 
 

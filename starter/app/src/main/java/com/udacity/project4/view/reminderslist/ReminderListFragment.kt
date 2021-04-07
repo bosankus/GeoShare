@@ -7,6 +7,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.livinglifetechway.quickpermissions_kotlin.runWithPermissions
 import com.udacity.project4.R
 import com.udacity.project4.databinding.FragmentRemindersBinding
 import com.udacity.project4.utils.*
@@ -41,14 +42,17 @@ class ReminderListFragment : Fragment() {
             authManager = AuthManager(requireActivity())
             setOnClickListeners()
         }
-
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
             activity?.finishAffinity()
         }
     }
 
     private fun setOnClickListeners() {
-        binding?.addReminderFAB?.setOnClickListener { navigateToAddReminder() }
+        binding?.addReminderFAB?.setOnClickListener {
+            requireActivity().runWithPermissions(FINE_LOCATION, COARSE_LOCATION) {
+                navigateToAddReminder()
+            }
+        }
     }
 
     private fun navigateToAddReminder() {

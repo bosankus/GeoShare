@@ -32,10 +32,12 @@ class MainActivity : AppCompatActivity() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
         authManager = AuthManager(this)
-
-        checkDeviceLocationSettings()
     }
 
+    override fun onStart() {
+        super.onStart()
+        checkDeviceLocationSettings()
+    }
 
     private fun checkDeviceLocationSettings(resolve: Boolean = true) {
         val locationRequest = LocationRequest.create().apply {
@@ -66,11 +68,7 @@ class MainActivity : AppCompatActivity() {
                 )
             }
         }
-        locationSettingsResponseTask.addOnCompleteListener {
-            if (it.isSuccessful) {
-                showSnack(binding.activityMain, "Location request enabled")
-            }
-        }
+        locationSettingsResponseTask.addOnCompleteListener {}
     }
 
 
@@ -89,8 +87,8 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         } else if (requestCode == REQUEST_TURN_DEVICE_LOCATION_ON)
-            checkDeviceLocationSettings()
-        else showSnack(findViewById(R.id.activity_main), "Failed to authenticate")
+            showSnack(binding.activityMain, "Background location permission provided")
+        else showSnack(binding.activityMain, "Failed to authenticate")
     }
 
 }

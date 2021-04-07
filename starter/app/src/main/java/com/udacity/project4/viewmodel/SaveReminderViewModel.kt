@@ -31,6 +31,9 @@ class SaveReminderViewModel @Inject constructor(
     private var _showMessage = MutableLiveData<String>()
     val showMessage: LiveData<String> get() = _showMessage
 
+    private var _isReminderSaved = MutableLiveData(false)
+    val isReminderSaved: LiveData<Boolean> get() = _isReminderSaved
+
     val reminderTitle = MutableLiveData<String?>()
     val reminderDescription = MutableLiveData<String?>()
 
@@ -55,6 +58,7 @@ class SaveReminderViewModel @Inject constructor(
                         reminderData.id
                     )
                 )
+                _isReminderSaved.value = true
                 _showLoading.value = false
                 _showMessage.value = "Reminded saved successfully"
             }
