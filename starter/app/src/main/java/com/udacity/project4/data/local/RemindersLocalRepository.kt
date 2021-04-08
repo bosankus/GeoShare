@@ -4,6 +4,7 @@ import com.udacity.project4.data.ReminderDataSource
 import com.udacity.project4.data.model.Reminder
 import com.udacity.project4.data.dto.Result
 import kotlinx.coroutines.*
+import timber.log.Timber
 
 /**
  * Concrete implementation of a data source as a db.
@@ -27,7 +28,7 @@ class RemindersLocalRepository(private val remindersDao: RemindersDao) : Reminde
      */
     override suspend fun saveReminder(reminder: Reminder) =
         withContext(Dispatchers.IO) {
-            remindersDao.saveReminder(reminder)
+           remindersDao.saveReminder(reminder)
         }
 
     /**

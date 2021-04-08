@@ -18,6 +18,7 @@ import com.udacity.project4.view.reminderslist.ReminderDataItem
 class FragmentReminderDetails : Fragment() {
 
     private var binding: FragmentReminderDetailsBinding? = null
+    private val reminderArgs by lazy { FragmentReminderDetailsArgs.fromBundle(requireArguments()).reminderItem }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -26,7 +27,6 @@ class FragmentReminderDetails : Fragment() {
     ): View? {
         binding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_reminder_details, container, false)
-        val reminderArgs = FragmentReminderDetailsArgs.fromBundle(requireArguments()).reminderItem
         return binding?.apply {
             lifecycleOwner = viewLifecycleOwner
             reminderItem = reminderArgs
@@ -41,8 +41,7 @@ class FragmentReminderDetails : Fragment() {
     companion object {
         private const val EXTRA_ReminderDataItem = "EXTRA_ReminderDataItem"
 
-
-        // receive the reminder object after the user clicks on the notificatio
+        // receive the reminder object after the user clicks on the notification
         fun newIntent(context: Context, reminderDataItem: ReminderDataItem): Intent {
             val intent = Intent(context, FragmentReminderDetails::class.java)
             intent.putExtra(EXTRA_ReminderDataItem, reminderDataItem)

@@ -21,36 +21,26 @@ class GeofenceBroadcastReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context, intent: Intent) {
         if (intent.action == ACTION_GEOFENCE_EVENT) {
+
             val geofencingEvent = GeofencingEvent.fromIntent(intent)
-            val geofenceTransition = geofencingEvent.geofenceTransition
 
             if (geofencingEvent.hasError()) {
                 Timber.i("Error while activating Geofencing: ${geofencingEvent.errorCode}")
                 return
-            } else if (geofenceTransition == Geofence.GEOFENCE_TRANSITION_ENTER ||
-                geofenceTransition == Geofence.GEOFENCE_TRANSITION_EXIT
-            ) {
-                val triggeringGeofence = geofencingEvent.triggeringGeofences
-                Timber.i("Geofence details: $triggeringGeofence")
+            } else {
 
-                geofencingEvent.triggeringGeofences.forEach {
-                    val geofenceId = it.requestId
-                    Timber.i("You are in geofence: $geofenceId")
+                val geofenceTransition = geofencingEvent.geofenceTransition
+
+                if (geofenceTransition == Geofence.GEOFENCE_TRANSITION_ENTER or Geofence.GEOFENCE_TRANSITION_DWELL or Geofence.GEOFENCE_TRANSITION_EXIT) {
+                    val geofenceId = geofencingEvent.triggeringGeofences[0].requestId
+
+                    val jobIntent = Intent(context, GeofenceTransitionsJobIntentService::class.java)
+                        .putExtra("REMINDER_ID", geofenceId)
+                    GeofenceTransitionsJobIntentService.enqueueWork(context, jobIntent)
                 }
-            } else return
 
 
-            /*if (geofencingEvent.geofenceTransition == Geofence.GEOFENCE_TRANSITION_ENTER) {
-                val fenceId: String = when {
-                    geofencingEvent.triggeringGeofences.isNotEmpty() ->
-                        geofencingEvent.triggeringGeofences[0].requestId
-                    else -> {
-                        Timber.i("No Geofence request found, abort mission!")
-                        return
-                    }
-                }
-                Timber.i(fenceId)
-            }*/
+            }
         }
     }
 }

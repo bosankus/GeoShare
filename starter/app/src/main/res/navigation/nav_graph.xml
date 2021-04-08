@@ -5,6 +5,11 @@
     android:id="@+id/nav_graph"
     app:startDestination="@id/splashFragment">
 
+    <action
+        android:id="@+id/action_global_reminderDetailsFragment"
+        app:destination="@+id/fragmentReminderDetails"
+        app:launchSingleTop="true"/>
+
     <fragment
         android:id="@+id/reminderListFragment"
         android:name="com.udacity.project4.view.reminderslist.ReminderListFragment"
@@ -31,21 +36,23 @@
         <action
             android:id="@+id/action_saveReminderFragment_to_selectLocationFragment"
             app:destination="@id/selectLocationFragment" />
-        <argument android:name="selectedLatitude"
-            android:defaultValue="0" />
-        <argument android:name="selectedLongitute"
-            android:defaultValue="0" />
+        <argument
+            android:name="selectedLatitude"
+            android:defaultValue="0.0" />
+        <argument
+            android:name="selectedLongitute"
+            android:defaultValue="0.0" />
         <argument
             android:name="selectedLocationName"
+            android:defaultValue=" "
             app:argType="string"
-            app:nullable="true"
-            android:defaultValue=" " />
+            app:nullable="true" />
     </fragment>
     <fragment
         android:id="@+id/selectLocationFragment"
         android:name="com.udacity.project4.view.selectreminderlocation.SelectLocationFragment"
         android:label="Select Location"
-        tools:layout="@layout/fragment_select_location" >
+        tools:layout="@layout/fragment_select_location">
         <action
             android:id="@+id/action_selectLocationFragment_to_saveReminderFragment"
             app:destination="@id/saveReminderFragment" />
@@ -69,7 +76,8 @@
             app:destination="@id/reminderListFragment" />
         <argument
             android:name="reminderItem"
-            app:argType="com.udacity.project4.data.model.Reminder" />
+            app:argType="com.udacity.project4.data.model.Reminder"
+            app:nullable="true" />
     </fragment>
     <fragment
         android:id="@+id/splashFragment"

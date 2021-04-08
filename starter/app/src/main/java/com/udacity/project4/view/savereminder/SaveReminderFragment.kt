@@ -25,19 +25,20 @@ import com.udacity.project4.utils.*
 import com.udacity.project4.view.reminderslist.ReminderDataItem
 import com.udacity.project4.viewmodel.SaveReminderViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import java.util.*
 
 @AndroidEntryPoint
 class SaveReminderFragment : Fragment() {
 
-    private val _viewModel: SaveReminderViewModel by viewModels()
     private lateinit var geoFencingClient: GeofencingClient
+    private val _viewModel: SaveReminderViewModel by viewModels()
     private var binding: FragmentSaveReminderBinding? = null
+    private var reminderId = ""
 
-    private val selectedLatitude: Int by lazy { SaveReminderFragmentArgs.fromBundle(requireArguments()).selectedLatitude }
+    private val selectedLatitude by lazy { SaveReminderFragmentArgs.fromBundle(requireArguments()).selectedLatitude }
     private val selectedLongitude by lazy { SaveReminderFragmentArgs.fromBundle(requireArguments()).selectedLongitute }
-    private val selectedLocationName by lazy { SaveReminderFragmentArgs.fromBundle(requireArguments()).selectedLocationName.toString() }
+    private val selectedLocationName by lazy { SaveReminderFragmentArgs.fromBundle(requireArguments()).selectedLocationName }
 
-    // Private variable to handle geoFence transitions
     private val geoFencePendingIntent: PendingIntent by lazy {
         val intent = Intent(requireContext(), GeofenceBroadcastReceiver::class.java)
         intent.action = ACTION_GEOFENCE_EVENT
@@ -62,9 +63,7 @@ class SaveReminderFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         geoFencingClient = LocationServices.getGeofencingClient(requireContext())
-
         setObserver()
         setOnClickListeners()
     }
@@ -72,10 +71,15 @@ class SaveReminderFragment : Fragment() {
     private fun setObserver() {
         _viewModel.apply {
             showMessage.observe(viewLifecycleOwner, { message ->
-                /*message?.let { showSnack(requireView(), it) }*/
+                message?.let { showSnack(requireView(), it) }
             })
             isReminderSaved.observe(viewLifecycleOwner, { status ->
-
+                if (status) {
+                    val lat = selectedLatitude.toDouble()
+                    val long = selectedLongitude.toDouble()
+                    val latLng = LatLng(lat, long)
+                    startGeoFencing(latLng)
+                }
             })
         }
     }
@@ -92,9 +96,8 @@ class SaveReminderFragment : Fragment() {
 
             }
             saveReminder.setOnClickListener {
-                if (selectedLatitude != 0 && selectedLongitude != 0) {
-                    val latLng = LatLng(selectedLatitude.toDouble(), selectedLongitude.toDouble())
-                    startGeoFencing(latLng)
+                if (selectedLatitude != 0.0f && selectedLongitude != 0.0f) {
+                    /*val latLng = LatLng(selectedLatitude.toDouble(), selectedLongitude.toDouble())*/
                     saveReminderData()
                 }
             }
@@ -105,10 +108,10 @@ class SaveReminderFragment : Fragment() {
         val locations = arrayOf(latLng)
         val geoFences = locations.map {
             Geofence.Builder()
-                .setRequestId(it.hashCode().toString())
+                .setRequestId(reminderId)
                 .setExpirationDuration(Geofence.NEVER_EXPIRE)
                 .setCircularRegion(it.latitude, it.longitude, GEOFENCE_RADIUS)
-                .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER)
+                .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER or Geofence.GEOFENCE_TRANSITION_EXIT)
                 .build()
         }
         val geoFencingRequest = GeofencingRequest.Builder().apply {
@@ -139,12 +142,14 @@ class SaveReminderFragment : Fragment() {
     }
 
     private fun saveReminderData() {
+        reminderId = UUID.randomUUID().toString()
         val title = binding?.reminderTitle?.text.toString()
         val description = binding?.reminderDescription?.text.toString()
         val location = selectedLocationName
         val latitude = selectedLatitude.toDouble()
         val longitude = selectedLongitude.toDouble()
-        val reminder = ReminderDataItem(title, description, location, latitude, longitude)
+        val reminder =
+            ReminderDataItem(title, description, location, latitude, longitude, reminderId)
         _viewModel.validateAndSaveReminder(reminder)
     }
 

@@ -4,17 +4,21 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
+import android.content.Intent
 import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.core.app.TaskStackBuilder
 import com.udacity.project4.BuildConfig
 import com.udacity.project4.R
+import com.udacity.project4.data.model.Reminder
+import com.udacity.project4.view.main.MainActivity
 import com.udacity.project4.view.reminderdetails.FragmentReminderDetails
 import com.udacity.project4.view.reminderslist.ReminderDataItem
+import timber.log.Timber
 
 private const val NOTIFICATION_CHANNEL_ID = BuildConfig.APPLICATION_ID + ".channel"
 
-fun sendNotification(context: Context, reminderDataItem: ReminderDataItem) {
+fun sendNotifications(context: Context, reminderDataItem: Reminder) {
     val notificationManager = context
         .getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
@@ -31,25 +35,38 @@ fun sendNotification(context: Context, reminderDataItem: ReminderDataItem) {
         notificationManager.createNotificationChannel(channel)
     }
 
-    val intent = FragmentReminderDetails.newIntent(context.applicationContext, reminderDataItem)
 
-    //create a pending intent that opens ReminderDescriptionActivity when the user clicks on the notification
-    val stackBuilder = TaskStackBuilder.create(context)
-        .addParentStack(FragmentReminderDetails::class.java)
-        .addNextIntent(intent)
-    val notificationPendingIntent = stackBuilder
-        .getPendingIntent(getUniqueId(), PendingIntent.FLAG_UPDATE_CURRENT)
+    // create a pending intent that opens ReminderDescriptionActivity when the user clicks on the notification
+    try {
 
-//    build the notification object with the data to be shown
-    val notification = NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_ID)
-        .setSmallIcon(R.mipmap.ic_launcher)
-        .setContentTitle(reminderDataItem.title)
-        .setContentText(reminderDataItem.location)
-        .setContentIntent(notificationPendingIntent)
-        .setAutoCancel(true)
-        .build()
+        val pendingIntent = PendingIntent.getActivity(
+            context.applicationContext, getUniqueId(),
+            Intent(context.applicationContext, MainActivity::class.java).also {
+                it.action = ACTION_DETAILS_FRAGMENT
+                it.putExtra(EXTRA_ReminderDataItem, reminderDataItem)
+            }, PendingIntent.FLAG_UPDATE_CURRENT
+        )
 
-    notificationManager.notify(getUniqueId(), notification)
+        /*val intent = FragmentReminderDetails.newIntent(context.applicationContext, reminderDataItem)
+        val stackBuilder = TaskStackBuilder.create(context.applicationContext)
+            .addParentStack(FragmentReminderDetails::class.java)
+            .addNextIntent(intent)
+        val notificationPendingIntent = stackBuilder
+            .getPendingIntent(getUniqueId(), PendingIntent.FLAG_UPDATE_CURRENT)*/
+
+        // build the notification object with the data to be shown
+        val notification = NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_ID)
+            .setSmallIcon(R.mipmap.ic_launcher)
+            .setContentTitle(reminderDataItem.title)
+            .setContentText(reminderDataItem.location)
+            .setContentIntent(pendingIntent)
+            .setAutoCancel(true)
+            .build()
+
+        notificationManager.notify(getUniqueId(), notification)
+    } catch (e: Exception) {
+        Timber.i("$e")
+    }
 }
 
 private fun getUniqueId() = ((System.currentTimeMillis() % 10000).toInt())

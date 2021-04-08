@@ -58,8 +58,8 @@ class SelectLocationFragment : Fragment(), OnMapReadyCallback {
                 val action =
                     SelectLocationFragmentDirections
                         .actionSelectLocationFragmentToSaveReminderFragment(
-                            latitude?.toInt()!!,
-                            longitude?.toInt()!!,
+                            latitude?.toFloat()!!,
+                            longitude?.toFloat()!!,
                             locationName
                         )
                 findNavController().navigate(action)

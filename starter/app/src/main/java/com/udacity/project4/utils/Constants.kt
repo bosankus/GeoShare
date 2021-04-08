@@ -19,3 +19,6 @@ const val BACKGROUND_LOCATION = Manifest.permission.ACCESS_BACKGROUND_LOCATION
 const val REQUEST_TURN_DEVICE_LOCATION_ON = 1001
 const val ACTION_GEOFENCE_EVENT = "geofence_event"
 const val GEOFENCE_RADIUS = 500.0f
+
+const val ACTION_DETAILS_FRAGMENT = "action_reminder_details_fragment"
+const val EXTRA_ReminderDataItem = "EXTRA_ReminderDataItem"

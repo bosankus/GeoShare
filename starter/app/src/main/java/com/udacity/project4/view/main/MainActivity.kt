@@ -11,10 +11,10 @@ import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.LocationSettingsRequest
 import com.udacity.project4.R
+import com.udacity.project4.data.model.Reminder
 import com.udacity.project4.databinding.ActivityMainBinding
-import com.udacity.project4.utils.AuthManager
-import com.udacity.project4.utils.REQUEST_TURN_DEVICE_LOCATION_ON
-import com.udacity.project4.utils.showSnack
+import com.udacity.project4.utils.*
+import com.udacity.project4.view.reminderdetails.FragmentReminderDetailsDirections
 import dagger.hilt.android.AndroidEntryPoint
 
 /**
@@ -32,6 +32,21 @@ class MainActivity : AppCompatActivity() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
         authManager = AuthManager(this)
+
+        navigateToFragmentReminderDetailsWhenNeeded(intent)
+    }
+
+    private fun navigateToFragmentReminderDetailsWhenNeeded(intent: Intent?) {
+        intent?.let {
+            if (it.action == ACTION_DETAILS_FRAGMENT) {
+                val reminderItem = it.getParcelableExtra<Reminder>(EXTRA_ReminderDataItem) as Reminder
+                val action = FragmentReminderDetailsDirections.actionGlobalReminderDetailsFragment(
+                    reminderItem
+                )
+                findNavController(R.id.nav_host_fragment)
+                    .navigate(action)
+            }
+        }
     }
 
     override fun onStart() {
