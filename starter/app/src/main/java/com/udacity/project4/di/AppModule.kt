@@ -1,6 +1,5 @@
 package com.udacity.project4.di
 
-import android.app.AlertDialog
 import android.content.Context
 import androidx.room.Room
 import com.udacity.project4.data.local.RemindersDao
@@ -10,7 +9,6 @@ import com.udacity.project4.utils.REMINDER_DATABASE_NAME
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.qualifiers.ActivityContext
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
@@ -19,6 +17,10 @@ import javax.inject.Singleton
 Author: Ankush Bose
 Date: 05,April,2021
  **/
+
+/**The AppModule class is implemented to provide following dependencies
+ * [RemindersDatabase], [RemindersDao], [RemindersLocalRepository]
+ * */
 
 @Module
 @InstallIn(SingletonComponent::class)

@@ -1,6 +1,7 @@
 package com.udacity.project4.view.selectreminderlocation
 
 import android.annotation.SuppressLint
+import android.location.Geocoder
 import android.os.Build
 import android.os.Bundle
 import android.view.*
@@ -24,22 +25,20 @@ class SelectLocationFragment : Fragment(), OnMapReadyCallback {
 
     private var binding: FragmentSelectLocationBinding? = null
     private var map: GoogleMap? = null
-    private var locationName: String = ""
     private var latitude: Double? = null
     private var longitude: Double? = null
+    private var locationName: String = ""
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
-        binding =
-            DataBindingUtil.inflate(inflater, R.layout.fragment_select_location, container, false)
-
+        binding = DataBindingUtil
+            .inflate(inflater, R.layout.fragment_select_location, container, false)
         return binding?.apply {
             lifecycleOwner = viewLifecycleOwner
             mapView.onCreate(savedInstanceState)
             setHasOptionsMenu(true)
             setDisplayHomeAsUpEnabled(true)
-            onLocationSelected()
         }?.root
 
     }
@@ -51,6 +50,7 @@ class SelectLocationFragment : Fragment(), OnMapReadyCallback {
         binding?.mapView?.getMapAsync(this)
         setOnClickListener()
     }
+
 
     private fun setOnClickListener() {
         binding?.selectLocation?.setOnClickListener {
@@ -65,12 +65,6 @@ class SelectLocationFragment : Fragment(), OnMapReadyCallback {
                 findNavController().navigate(action)
             } else showSnack(requireView(), "Please select a location")
         }
-    }
-
-    private fun onLocationSelected() {
-        //        TODO: When the user confirms on the selected location,
-        //         send back the selected location details to the view model
-        //         and navigate back to the previous fragment to save the reminder and add the geofence
     }
 
 
@@ -92,8 +86,8 @@ class SelectLocationFragment : Fragment(), OnMapReadyCallback {
 
     private fun setMapLongClick(map: GoogleMap) {
         map.setOnMapClickListener {
-            latitude = it.latitude
-            longitude = it.longitude
+            latitude = it.latitude.formatDouble()
+            longitude = it.longitude.formatDouble()
             locationName = "lat: $latitude, long: $longitude"
             showSnack(requireView(), locationName)
             val snippet = String.format(
@@ -146,6 +140,7 @@ class SelectLocationFragment : Fragment(), OnMapReadyCallback {
         inflater.inflate(R.menu.map_options, menu)
     }
 
+
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
         // TODO: Change the map type based on the user's selection.
         R.id.normal_map -> {
@@ -167,35 +162,42 @@ class SelectLocationFragment : Fragment(), OnMapReadyCallback {
         else -> super.onOptionsItemSelected(item)
     }
 
+
     override fun onResume() {
         super.onResume()
         binding?.mapView?.onResume()
     }
+
 
     override fun onStart() {
         super.onStart()
         binding?.mapView?.onStart()
     }
 
+
     override fun onStop() {
         super.onStop()
         binding?.mapView?.onStop()
     }
+
 
     override fun onPause() {
         super.onPause()
         binding?.mapView?.onPause()
     }
 
+
     override fun onLowMemory() {
         super.onLowMemory()
         binding?.mapView?.onLowMemory()
     }
 
+
     override fun onDestroy() {
         super.onDestroy()
         binding = null
     }
+
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)

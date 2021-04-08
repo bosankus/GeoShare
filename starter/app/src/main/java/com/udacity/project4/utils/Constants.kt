@@ -9,6 +9,8 @@ Author: Ankush Bose
 Date: 05,April,2021
  **/
 
+/** This Object is used to store application's constant values in under one object */
+
 const val REMINDER_DATABASE_NAME = "reminder_db"
 
 const val ANDROID_10 = Build.VERSION_CODES.Q

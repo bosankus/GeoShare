@@ -37,6 +37,7 @@ class SaveReminderViewModel @Inject constructor(
     val reminderTitle = MutableLiveData<String?>()
     val reminderDescription = MutableLiveData<String?>()
 
+
     fun validateAndSaveReminder(reminderData: ReminderDataItem) {
         if (validateEnteredData(reminderData)) {
             saveReminder(reminderData)
@@ -67,6 +68,7 @@ class SaveReminderViewModel @Inject constructor(
             _showMessage.value = "Couldn't save reminder due to: ${e.localizedMessage}"
         }
     }
+
 
     private fun validateEnteredData(reminderData: ReminderDataItem): Boolean {
         return if (reminderData.latitude == 0.0 || reminderData.longitude == 0.0) {

@@ -8,17 +8,33 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.google.android.material.snackbar.Snackbar
+import java.text.DecimalFormat
 
 
 /**
  * Extension function to setup the RecyclerView
  */
 
+
+fun showSnack(view: View, message: String) =
+    Snackbar.make(view, message, Snackbar.LENGTH_LONG).show()
+
+
+fun Context.showToast(message: String) =
+    Toast.makeText(this, message, Toast.LENGTH_LONG).show()
+
+fun Double.formatDouble(): Double {
+    val input = this
+    val decimalFormat = DecimalFormat("##.######")
+    return decimalFormat.format(input).toDouble()
+}
+
 fun Fragment.setTitle(title: String) {
     if (activity is AppCompatActivity) {
         (activity as AppCompatActivity).supportActionBar?.title = title
     }
 }
+
 
 fun Fragment.setDisplayHomeAsUpEnabled(bool: Boolean) {
     if (activity is AppCompatActivity) {
@@ -28,7 +44,7 @@ fun Fragment.setDisplayHomeAsUpEnabled(bool: Boolean) {
     }
 }
 
-//animate changing the view visibility
+
 fun View.fadeIn() {
     this.visibility = View.VISIBLE
     this.alpha = 0f
@@ -39,7 +55,7 @@ fun View.fadeIn() {
     })
 }
 
-//animate changing the view visibility
+
 fun View.fadeOut() {
     this.animate().alpha(0f).setListener(object : AnimatorListenerAdapter() {
         override fun onAnimationEnd(animation: Animator) {
@@ -49,9 +65,4 @@ fun View.fadeOut() {
     })
 }
 
-fun showSnack(view: View, message: String) =
-    Snackbar.make(view, message, Snackbar.LENGTH_LONG).show()
 
-fun Context.showToast(message: String) {
-    Toast.makeText(this, message, Toast.LENGTH_LONG).show()
-}

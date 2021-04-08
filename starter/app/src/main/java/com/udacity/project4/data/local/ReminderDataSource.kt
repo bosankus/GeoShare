@@ -1,4 +1,4 @@
-package com.udacity.project4.data
+package com.udacity.project4.data.local
 
 import androidx.lifecycle.LiveData
 import com.udacity.project4.data.model.Reminder

@@ -5,6 +5,7 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
 import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.core.app.TaskStackBuilder
@@ -15,6 +16,8 @@ import com.udacity.project4.view.main.MainActivity
 import com.udacity.project4.view.reminderdetails.FragmentReminderDetails
 import com.udacity.project4.view.reminderslist.ReminderDataItem
 import timber.log.Timber
+
+/** This object was created to send notification */
 
 private const val NOTIFICATION_CHANNEL_ID = BuildConfig.APPLICATION_ID + ".channel"
 
@@ -30,15 +33,16 @@ fun sendNotifications(context: Context, reminderDataItem: Reminder) {
         val channel = NotificationChannel(
             NOTIFICATION_CHANNEL_ID,
             name,
-            NotificationManager.IMPORTANCE_DEFAULT
-        )
+            NotificationManager.IMPORTANCE_HIGH
+        ).apply {
+            lightColor = Color.BLUE
+            enableVibration(true)
+            setShowBadge(true)
+        }
         notificationManager.createNotificationChannel(channel)
     }
 
-
-    // create a pending intent that opens ReminderDescriptionActivity when the user clicks on the notification
     try {
-
         val pendingIntent = PendingIntent.getActivity(
             context.applicationContext, getUniqueId(),
             Intent(context.applicationContext, MainActivity::class.java).also {
@@ -46,13 +50,6 @@ fun sendNotifications(context: Context, reminderDataItem: Reminder) {
                 it.putExtra(EXTRA_ReminderDataItem, reminderDataItem)
             }, PendingIntent.FLAG_UPDATE_CURRENT
         )
-
-        /*val intent = FragmentReminderDetails.newIntent(context.applicationContext, reminderDataItem)
-        val stackBuilder = TaskStackBuilder.create(context.applicationContext)
-            .addParentStack(FragmentReminderDetails::class.java)
-            .addNextIntent(intent)
-        val notificationPendingIntent = stackBuilder
-            .getPendingIntent(getUniqueId(), PendingIntent.FLAG_UPDATE_CURRENT)*/
 
         // build the notification object with the data to be shown
         val notification = NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_ID)

@@ -7,24 +7,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.udacity.project4.data.model.Reminder
 import com.udacity.project4.view.adapter.ReminderAdapter
 
+/** This is an Util class to create custom BindingAdapters */
 
 object BindingAdapters {
 
     /**
      * Use binding adapter to set the recycler view data using livedata object
      */
-    /*@Suppress("UNCHECKED_CAST")
-    @BindingAdapter("android:liveData")
-    @JvmStatic
-    fun <T> setRecyclerViewData(recyclerView: RecyclerView, items: LiveData<List<T>>?) {
-        items?.value?.let { itemList ->
-            (recyclerView.adapter as? BaseRecyclerViewAdapter<T>)?.apply {
-                clear()
-                addData(itemList)
-            }
-        }
-    }*/
-
     @BindingAdapter("listData")
     @JvmStatic
     fun RecyclerView.bindRecyclerView(list: LiveData<List<Reminder?>>) {
@@ -56,6 +45,9 @@ object BindingAdapters {
         }
     }
 
+    /**
+     * Use this binding adapter to show and hide the views using a list size
+     */
     @BindingAdapter("isLoading")
     @JvmStatic
     fun View.bindLoadingState(size: Int) {

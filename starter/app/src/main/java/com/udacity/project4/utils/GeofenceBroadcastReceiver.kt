@@ -22,24 +22,22 @@ class GeofenceBroadcastReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         if (intent.action == ACTION_GEOFENCE_EVENT) {
 
-            val geofencingEvent = GeofencingEvent.fromIntent(intent)
+            val geoFencingEvent = GeofencingEvent.fromIntent(intent)
 
-            if (geofencingEvent.hasError()) {
-                Timber.i("Error while activating Geofencing: ${geofencingEvent.errorCode}")
+            if (geoFencingEvent.hasError()) {
+                Timber.i("Error while activating Geofencing: ${geoFencingEvent.errorCode}")
                 return
             } else {
 
-                val geofenceTransition = geofencingEvent.geofenceTransition
+                val geoFenceTransition = geoFencingEvent.geofenceTransition
 
-                if (geofenceTransition == Geofence.GEOFENCE_TRANSITION_ENTER or Geofence.GEOFENCE_TRANSITION_DWELL or Geofence.GEOFENCE_TRANSITION_EXIT) {
-                    val geofenceId = geofencingEvent.triggeringGeofences[0].requestId
+                if (geoFenceTransition == Geofence.GEOFENCE_TRANSITION_ENTER) {
+                    val geofenceId = geoFencingEvent.triggeringGeofences[0].requestId
 
                     val jobIntent = Intent(context, GeofenceTransitionsJobIntentService::class.java)
                         .putExtra("REMINDER_ID", geofenceId)
                     GeofenceTransitionsJobIntentService.enqueueWork(context, jobIntent)
                 }
-
-
             }
         }
     }

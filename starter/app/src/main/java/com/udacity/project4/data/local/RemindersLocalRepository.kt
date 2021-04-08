@@ -1,10 +1,8 @@
 package com.udacity.project4.data.local
 
-import com.udacity.project4.data.ReminderDataSource
 import com.udacity.project4.data.model.Reminder
 import com.udacity.project4.data.dto.Result
 import kotlinx.coroutines.*
-import timber.log.Timber
 
 /**
  * Concrete implementation of a data source as a db.

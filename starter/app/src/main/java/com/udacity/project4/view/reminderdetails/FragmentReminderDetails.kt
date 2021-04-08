@@ -1,7 +1,5 @@
-package com.udacity.project4.view.reminderdetails
+ package com.udacity.project4.view.reminderdetails
 
-import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,15 +8,17 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import com.udacity.project4.R
 import com.udacity.project4.databinding.FragmentReminderDetailsBinding
-import com.udacity.project4.view.reminderslist.ReminderDataItem
 
 /**
  * Activity that displays the reminder details after the user clicks on the notification
  */
+
 class FragmentReminderDetails : Fragment() {
 
     private var binding: FragmentReminderDetailsBinding? = null
-    private val reminderArgs by lazy { FragmentReminderDetailsArgs.fromBundle(requireArguments()).reminderItem }
+    private val reminderArgs by lazy {
+        FragmentReminderDetailsArgs.fromBundle(requireArguments()).reminderItem
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -38,7 +38,7 @@ class FragmentReminderDetails : Fragment() {
         binding = null
     }
 
-    companion object {
+    /*companion object {
         private const val EXTRA_ReminderDataItem = "EXTRA_ReminderDataItem"
 
         // receive the reminder object after the user clicks on the notification
@@ -47,5 +47,5 @@ class FragmentReminderDetails : Fragment() {
             intent.putExtra(EXTRA_ReminderDataItem, reminderDataItem)
             return intent
         }
-    }
+    }*/
 }

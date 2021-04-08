@@ -4,7 +4,7 @@ import android.app.Application
 import androidx.test.core.app.ApplicationProvider.getApplicationContext
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
-import com.udacity.project4.data.ReminderDataSource
+import com.udacity.project4.data.local.ReminderDataSource
 import com.udacity.project4.data.local.LocalDB
 import com.udacity.project4.data.local.RemindersLocalRepository
 import com.udacity.project4.viewmodel.RemindersListViewModel

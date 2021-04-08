@@ -13,6 +13,12 @@ import com.google.firebase.auth.FirebaseUser
  * Author: Ankush Bose
  * On: 10/Feb/2021
  */
+
+/** This class is implemented to login/signUp user following methods:
+ * [AuthUI.IdpConfig.EmailBuilder]  : For email - password signup
+ * [AuthUI.IdpConfig.GoogleBuilder] : For google authentication
+ * */
+
 class AuthManager(
     private val activity: Activity,
     private val auth: FirebaseAuth = FirebaseAuth.getInstance()
@@ -28,16 +34,6 @@ class AuthManager(
             return if (isUserLoggedIn) auth.currentUser else null
         }
 
-    /*val userEmail: String?
-        get() {
-            return if (isUserLoggedIn) auth.currentUser?.email else null
-        }
-
-    val userId: String?
-        get() {
-            return if (isUserLoggedIn) auth.currentUser?.uid else null
-        }*/
-
     private val providers = arrayListOf(
         AuthUI.IdpConfig.EmailBuilder().build(),
         AuthUI.IdpConfig.GoogleBuilder().build()
@@ -49,7 +45,6 @@ class AuthManager(
             .createSignInIntentBuilder()
             .setAvailableProviders(providers)
             .build(),
-        // request code
         RC_SIGN_IN
     )
 

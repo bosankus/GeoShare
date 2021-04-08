@@ -1,11 +1,15 @@
 package com.udacity.project4.utils
 
 /**
- * Created by Androidplay
  * Author: Ankush
- * On: 13/Sep/2020
- * Email: ankush@androidplay.in
+ * On: 05 April 2021
  */
+
+/**
+ * A sealed class that encapsulates successful outcome with a value of type [T]
+ * or a failure with message
+ */
+
 sealed class ResultData<out T> {
     object DoNothing : ResultData<Nothing>()
     object Loading : ResultData<Nothing>()

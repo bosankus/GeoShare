@@ -6,12 +6,17 @@ import androidx.core.app.JobIntentService
 import com.udacity.project4.data.dto.Result
 import com.udacity.project4.data.local.RemindersLocalRepository
 import com.udacity.project4.data.model.Reminder
-import com.udacity.project4.view.reminderslist.ReminderDataItem
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
 import timber.log.Timber
 import javax.inject.Inject
 import kotlin.coroutines.CoroutineContext
+
+/** This service class is used implemented to handle long running handle task.
+ *  In this case, the class handles getting [Reminder] object from
+ *  [GeofenceBroadcastReceiver] class and triggers the notification on the basis of
+ *  Geofence Transition events
+ * */
 
 @AndroidEntryPoint
 class GeofenceTransitionsJobIntentService : JobIntentService(), CoroutineScope {
@@ -25,8 +30,6 @@ class GeofenceTransitionsJobIntentService : JobIntentService(), CoroutineScope {
 
     companion object {
         private const val JOB_ID = 573
-
-        //        TODO: call this to start the JobIntentService to handle the geofencing transition events
         fun enqueueWork(context: Context, intent: Intent) {
             enqueueWork(
                 context,
@@ -42,16 +45,12 @@ class GeofenceTransitionsJobIntentService : JobIntentService(), CoroutineScope {
         reminderId?.let { sendNotification(it) }
     }
 
-    //TODO: get the request id of the current geofence
     private fun sendNotification(reminderId: String) {
         CoroutineScope(coroutineContext).launch(SupervisorJob()) {
-
             val result = remindersLocalRepository.getReminder(reminderId)
 
             if (result is Result.Success<Reminder>) {
                 val reminderDTO = result.data
-
-                //send a notification to the user with the reminder details
                 sendNotifications(
                     this@GeofenceTransitionsJobIntentService, Reminder(
                         reminderDTO.title,
