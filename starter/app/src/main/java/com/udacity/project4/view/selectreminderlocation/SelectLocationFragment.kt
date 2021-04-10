@@ -1,7 +1,6 @@
 package com.udacity.project4.view.selectreminderlocation
 
 import android.annotation.SuppressLint
-import android.location.Geocoder
 import android.os.Build
 import android.os.Bundle
 import android.view.*
@@ -19,15 +18,20 @@ import com.livinglifetechway.quickpermissions_kotlin.runWithPermissions
 import com.udacity.project4.R
 import com.udacity.project4.databinding.FragmentSelectLocationBinding
 import com.udacity.project4.utils.*
+import com.udacity.project4.viewmodel.SaveReminderViewModel
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import java.util.*
 
 class SelectLocationFragment : Fragment(), OnMapReadyCallback {
 
+    private val viewModel by sharedViewModel<SaveReminderViewModel>()
     private var binding: FragmentSelectLocationBinding? = null
-    private var map: GoogleMap? = null
-    private var latitude: Double? = null
-    private var longitude: Double? = null
+
     private var locationName: String = ""
+    private var longitude: Double? = null
+    private var latitude: Double? = null
+    private var map: GoogleMap? = null
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -40,13 +44,11 @@ class SelectLocationFragment : Fragment(), OnMapReadyCallback {
             setHasOptionsMenu(true)
             setDisplayHomeAsUpEnabled(true)
         }?.root
-
     }
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         binding?.mapView?.getMapAsync(this)
         setOnClickListener()
     }
@@ -59,8 +61,7 @@ class SelectLocationFragment : Fragment(), OnMapReadyCallback {
                     SelectLocationFragmentDirections
                         .actionSelectLocationFragmentToSaveReminderFragment(
                             latitude?.toFloat()!!,
-                            longitude?.toFloat()!!,
-                            locationName
+                            longitude?.toFloat()!!
                         )
                 findNavController().navigate(action)
             } else showSnack(requireView(), "Please select a location")
@@ -90,6 +91,11 @@ class SelectLocationFragment : Fragment(), OnMapReadyCallback {
             longitude = it.longitude.formatDouble()
             locationName = "lat: $latitude, long: $longitude"
             showSnack(requireView(), locationName)
+
+            viewModel.location.value = locationName
+            viewModel.latitude.value = latitude
+            viewModel.longitude.value = longitude
+
             val snippet = String.format(
                 Locale.getDefault(),
                 "Lat: %1$.5f, Long: %2$.5f",
@@ -114,6 +120,11 @@ class SelectLocationFragment : Fragment(), OnMapReadyCallback {
             longitude = it.latLng.longitude
             locationName = String.format(Locale.ENGLISH, it.name)
             showSnack(requireView(), locationName)
+
+            viewModel.location.value = locationName
+            viewModel.latitude.value = latitude
+            viewModel.longitude.value = longitude
+
             val poiMarker = map.apply { clear() }
                 .addMarker(
                     MarkerOptions()
@@ -142,7 +153,6 @@ class SelectLocationFragment : Fragment(), OnMapReadyCallback {
 
 
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
-        // TODO: Change the map type based on the user's selection.
         R.id.normal_map -> {
             map?.mapType = GoogleMap.MAP_TYPE_NORMAL
             true

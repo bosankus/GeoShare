@@ -6,10 +6,9 @@ import androidx.core.app.JobIntentService
 import com.udacity.project4.data.dto.Result
 import com.udacity.project4.data.local.RemindersLocalRepository
 import com.udacity.project4.data.model.Reminder
-import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
+import org.koin.android.ext.android.inject
 import timber.log.Timber
-import javax.inject.Inject
 import kotlin.coroutines.CoroutineContext
 
 /** This service class is used implemented to handle long running handle task.
@@ -18,11 +17,9 @@ import kotlin.coroutines.CoroutineContext
  *  Geofence Transition events
  * */
 
-@AndroidEntryPoint
 class GeofenceTransitionsJobIntentService : JobIntentService(), CoroutineScope {
 
-    @Inject
-    lateinit var remindersLocalRepository: RemindersLocalRepository
+    private val remindersLocalRepository: RemindersLocalRepository by inject()
 
     private var coroutineJob: Job = Job()
     override val coroutineContext: CoroutineContext

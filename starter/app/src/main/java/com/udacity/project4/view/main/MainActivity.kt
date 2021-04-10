@@ -6,7 +6,6 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.NavController
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.LocationRequest
@@ -16,15 +15,12 @@ import com.udacity.project4.R
 import com.udacity.project4.data.model.Reminder
 import com.udacity.project4.databinding.ActivityMainBinding
 import com.udacity.project4.utils.*
-import com.udacity.project4.view.reminderdetails.FragmentReminderDetailsDirections
-import dagger.hilt.android.AndroidEntryPoint
-import timber.log.Timber
+import com.udacity.project4.view.splash.SplashFragmentDirections
 
 /**
  * The RemindersActivity that holds the reminders fragments
  */
 
-@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     private lateinit var authManager: AuthManager
@@ -38,7 +34,6 @@ class MainActivity : AppCompatActivity() {
         navController = navHostFragment.navController
 
         authManager = AuthManager(this)
-        navigateToFragmentReminderDetailsWhenNeeded(intent)
     }
 
 
@@ -47,13 +42,17 @@ class MainActivity : AppCompatActivity() {
         checkDeviceLocationSettings()
     }
 
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        navigateToFragmentReminderDetailsWhenNeeded(intent)
+    }
 
     private fun navigateToFragmentReminderDetailsWhenNeeded(intent: Intent?) {
         intent?.let {
             if (it.action == ACTION_DETAILS_FRAGMENT) {
                 val reminderItem =
-                    it.getParcelableExtra<Reminder>(EXTRA_ReminderDataItem) as Reminder
-                val action = FragmentReminderDetailsDirections.actionGlobalReminderDetailsFragment(
+                    it.getParcelableExtra<Reminder>(EXTRA_ReminderDataItem)
+                val action = SplashFragmentDirections.actionSplashFragmentToFragmentReminderDetails(
                     reminderItem
                 )
                 navController.navigate(action)
@@ -94,11 +93,9 @@ class MainActivity : AppCompatActivity() {
         locationSettingsResponseTask.addOnCompleteListener {}
     }
 
-
     private fun goToReminderFragment() {
         navController.navigate(R.id.action_authenticationFragment_to_reminderListFragment)
     }
-
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
