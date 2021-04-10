@@ -11,11 +11,15 @@ import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.LocationSettingsRequest
+import com.udacity.project4.NavGraphDirections
 import com.udacity.project4.R
 import com.udacity.project4.data.model.Reminder
 import com.udacity.project4.databinding.ActivityMainBinding
 import com.udacity.project4.utils.*
+import com.udacity.project4.view.reminderdetails.FragmentReminderDetailsArgs
+import com.udacity.project4.view.reminderslist.ReminderListFragmentDirections
 import com.udacity.project4.view.splash.SplashFragmentDirections
+import timber.log.Timber
 
 /**
  * The RemindersActivity that holds the reminders fragments
@@ -23,41 +27,21 @@ import com.udacity.project4.view.splash.SplashFragmentDirections
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var authManager: AuthManager
-    private lateinit var binding: ActivityMainBinding
     private lateinit var navController: NavController
+    private lateinit var binding: ActivityMainBinding
+    private lateinit var authManager: AuthManager
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
-        val navHostFragment =
-            supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+        val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment)
+                as NavHostFragment
         navController = navHostFragment.navController
 
+        navigateToReminderDetailsFragmentWhenNeeded(intent)
+
         authManager = AuthManager(this)
-    }
-
-
-    override fun onStart() {
-        super.onStart()
-        checkDeviceLocationSettings()
-    }
-
-    override fun onNewIntent(intent: Intent?) {
-        super.onNewIntent(intent)
-        navigateToFragmentReminderDetailsWhenNeeded(intent)
-    }
-
-    private fun navigateToFragmentReminderDetailsWhenNeeded(intent: Intent?) {
-        intent?.let {
-            if (it.action == ACTION_DETAILS_FRAGMENT) {
-                val reminderItem =
-                    it.getParcelableExtra<Reminder>(EXTRA_ReminderDataItem)
-                val action = SplashFragmentDirections.actionSplashFragmentToFragmentReminderDetails(
-                    reminderItem
-                )
-                navController.navigate(action)
-            }
-        }
     }
 
 
@@ -93,9 +77,11 @@ class MainActivity : AppCompatActivity() {
         locationSettingsResponseTask.addOnCompleteListener {}
     }
 
+
     private fun goToReminderFragment() {
         navController.navigate(R.id.action_authenticationFragment_to_reminderListFragment)
     }
+
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
@@ -110,5 +96,30 @@ class MainActivity : AppCompatActivity() {
         else showSnack(binding.activityMain, "Failed to authenticate")
     }
 
+
+    override fun onStart() {
+        super.onStart()
+        checkDeviceLocationSettings()
+    }
+
+
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        navigateToReminderDetailsFragmentWhenNeeded(intent)
+    }
+
+
+    private fun navigateToReminderDetailsFragmentWhenNeeded(intent: Intent?) {
+        intent?.let {
+            if (it.action == ACTION_DETAILS_FRAGMENT) {
+                try {
+                    val extras = it.extras?.get(EXTRA_ReminderDataItem) as Bundle
+                    navController.navigate(R.id.action_global_reminderDetailsFragment, extras)
+                } catch (e: Exception) {
+                    Timber.i("$e")
+                }
+            }
+        }
+    }
 }
 

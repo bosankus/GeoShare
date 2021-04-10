@@ -8,7 +8,8 @@
     <action
         android:id="@+id/action_global_reminderDetailsFragment"
         app:destination="@+id/fragmentReminderDetails"
-        app:launchSingleTop="true" />
+        app:popUpTo="@id/reminderListFragment"
+        app:popUpToInclusive="true"/>
 
     <fragment
         android:id="@+id/reminderListFragment"
@@ -85,9 +86,6 @@
         <action
             android:id="@+id/action_splashFragment_to_reminderListFragment"
             app:destination="@id/reminderListFragment" />
-        <action
-            android:id="@+id/action_splashFragment_to_fragmentReminderDetails"
-            app:destination="@id/fragmentReminderDetails" />
     </fragment>
 
 </navigation>

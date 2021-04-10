@@ -42,28 +42,24 @@ fun sendNotifications(context: Context, reminderDataItem: Reminder) {
         notificationManager.createNotificationChannel(channel)
     }
 
-    try {
-        val pendingIntent = PendingIntent.getActivity(
-            context.applicationContext, getUniqueId(),
-            Intent(context.applicationContext, MainActivity::class.java).also {
-                it.action = ACTION_DETAILS_FRAGMENT
-                it.putExtra(EXTRA_ReminderDataItem, reminderDataItem)
-            }, PendingIntent.FLAG_UPDATE_CURRENT
-        )
+    val pendingIntent = PendingIntent.getActivity(
+        context.applicationContext, getUniqueId(),
+        Intent(context.applicationContext, MainActivity::class.java).also {
+            it.action = ACTION_DETAILS_FRAGMENT
+            it.putExtra(EXTRA_ReminderDataItem, reminderDataItem)
+        }, PendingIntent.FLAG_UPDATE_CURRENT
+    )
 
-        // build the notification object with the data to be shown
-        val notification = NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_ID)
-            .setSmallIcon(R.mipmap.ic_launcher)
-            .setContentTitle(reminderDataItem.title)
-            .setContentText(reminderDataItem.location)
-            .setContentIntent(pendingIntent)
-            .setAutoCancel(true)
-            .build()
+    // build the notification object with the data to be shown
+    val notification = NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_ID)
+        .setSmallIcon(R.mipmap.ic_launcher)
+        .setContentTitle(reminderDataItem.title)
+        .setContentText(reminderDataItem.location)
+        .setContentIntent(pendingIntent)
+        .setAutoCancel(true)
+        .build()
 
-        notificationManager.notify(getUniqueId(), notification)
-    } catch (e: Exception) {
-        Timber.i("$e")
-    }
+    notificationManager.notify(getUniqueId(), notification)
 }
 
 private fun getUniqueId() = ((System.currentTimeMillis() % 10000).toInt())

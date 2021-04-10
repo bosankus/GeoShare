@@ -62,4 +62,68 @@ class RemindersDaoTest {
         assertThat(allReminderItems).contains(reminder)
     }
 
+    @Test
+    fun deleteReminderItem() = runBlockingTest {
+        // sample data for testing
+        val reminder =
+            Reminder(
+                "Testing location",
+                "Sample descriptio",
+                "location name",
+                22.647596,
+                88.645856,
+                "123456"
+            )
+        remindersDao.saveReminder(reminder)
+        remindersDao.deleteAllReminders()
+
+        val allReminders = remindersDao.getReminders().getOrAwaitValue()
+
+        assertThat(allReminders).doesNotContain(reminder)
+    }
+
+    @Test
+    fun getReminders() = runBlockingTest {
+        // sample data for testing
+        val reminderOne =
+            Reminder(
+                "Testing location",
+                "Sample descriptio",
+                "location name",
+                22.647596,
+                88.645856,
+                "123456"
+            )
+        val reminderTwo = Reminder(
+            "Testing location two",
+            "Sample descriptio",
+            "location name",
+            22.647596,
+            88.645856,
+            "1234561"
+        )
+
+        remindersDao.saveReminder(reminderOne)
+        remindersDao.saveReminder(reminderTwo)
+
+        val allReminders = remindersDao.getReminders().getOrAwaitValue()
+        assertThat(allReminders).containsAtLeast(reminderOne, reminderTwo)
+    }
+
+    @Test
+    fun getReminderById() = runBlockingTest {
+        // sample data for testing
+        val reminder =
+            Reminder(
+                "Testing location",
+                "Sample descriptio",
+                "location name",
+                22.647596,
+                88.645856,
+                "123456"
+            )
+        remindersDao.saveReminder(reminder)
+        val reminderItem = remindersDao.getReminderById("123456")
+        assertThat(reminderItem).isNotNull()
+    }
 }

@@ -34,19 +34,8 @@ class SplashFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        // ticker to check whether the user is logged in
-        val timer = object : CountDownTimer(1000, 3000) {
-            override fun onTick(millisUntilFinished: Long) {
-                // utilising time, time is money sir!
-                authManager = AuthManager(requireActivity())
-            }
-
-            override fun onFinish() {
-                checkIfLoggedIn()
-            }
-        }
-        timer.start()
+        authManager = AuthManager(requireActivity())
+        checkIfLoggedIn()
 
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
             activity?.finishAffinity()
@@ -58,7 +47,6 @@ class SplashFragment : Fragment() {
             findNavController().navigate(R.id.action_splashFragment_to_authenticationFragment)
         else findNavController().navigate(R.id.action_splashFragment_to_reminderListFragment)
     }
-
 
     override fun onDestroy() {
         super.onDestroy()
