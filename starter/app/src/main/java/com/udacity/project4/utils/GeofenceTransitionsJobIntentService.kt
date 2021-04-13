@@ -19,8 +19,6 @@ import kotlin.coroutines.CoroutineContext
 
 class GeofenceTransitionsJobIntentService : JobIntentService(), CoroutineScope {
 
-    private val remindersLocalRepository: RemindersLocalRepository by inject()
-
     private var coroutineJob: Job = Job()
     override val coroutineContext: CoroutineContext
         get() = Dispatchers.IO + coroutineJob
@@ -43,6 +41,7 @@ class GeofenceTransitionsJobIntentService : JobIntentService(), CoroutineScope {
     }
 
     private fun sendNotification(reminderId: String) {
+        val remindersLocalRepository: RemindersLocalRepository by inject()
         CoroutineScope(coroutineContext).launch(SupervisorJob()) {
             val result = remindersLocalRepository.getReminder(reminderId)
 

@@ -36,7 +36,7 @@ class RemindersLocalRepository(private val remindersDao: RemindersDao) : Reminde
      */
     override suspend fun getReminder(id: String): Result<Reminder> = withContext(Dispatchers.IO) {
         try {
-            val reminder = remindersDao.getReminderById(id)
+            val reminder: Reminder? = remindersDao.getReminderById(id)
             if (reminder != null) {
                 return@withContext Result.Success(reminder)
             } else {

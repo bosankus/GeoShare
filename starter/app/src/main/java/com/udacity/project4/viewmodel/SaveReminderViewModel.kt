@@ -7,14 +7,14 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.udacity.project4.R
-import com.udacity.project4.data.local.RemindersLocalRepository
+import com.udacity.project4.data.local.ReminderDataSource
 import com.udacity.project4.data.model.Reminder
 import kotlinx.coroutines.launch
 
 @SuppressLint("StaticFieldLeak")
 class SaveReminderViewModel(
     app: Application,
-    private val dataSource: RemindersLocalRepository
+    private val dataSource: ReminderDataSource
 ) :
     AndroidViewModel(app) {
 
