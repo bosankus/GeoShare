@@ -2,6 +2,7 @@ package com.udacity.project4.data.local
 
 import android.content.Context
 import androidx.room.Room
+import com.udacity.project4.utils.REMINDER_DATABASE_NAME
 
 
 /**
@@ -15,7 +16,7 @@ object LocalDB {
     fun createRemindersDao(context: Context): RemindersDao {
         return Room.databaseBuilder(
             context.applicationContext,
-            RemindersDatabase::class.java, "locationReminders.db"
+            RemindersDatabase::class.java, REMINDER_DATABASE_NAME
         ).build().reminderDao()
     }
 

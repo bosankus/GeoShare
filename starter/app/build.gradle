@@ -19,7 +19,8 @@ android {
         versionCode 1
         versionName "1.0"
         multiDexEnabled true
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        /*testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"*/
+        testInstrumentationRunner "com.udacity.project4.androidTest.KoinTestRunner"
     }
     buildTypes {
         release {
@@ -29,6 +30,9 @@ android {
     }
     kotlinOptions {
         jvmTarget = "1.8"
+    }
+    testOptions {
+        animationsDisabled = true
     }
     testOptions.unitTests {
         includeAndroidResources = true
