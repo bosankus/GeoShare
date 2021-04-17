@@ -1,6 +1,7 @@
 package com.udacity.project4
 
 import android.content.Context
+import androidx.annotation.VisibleForTesting
 import androidx.room.Room
 import com.udacity.project4.data.local.RemindersDao
 import com.udacity.project4.data.local.RemindersDatabase
@@ -16,6 +17,7 @@ object ServiceLocator {
 
     @Volatile
     var repository: RemindersLocalRepository? = null
+        @VisibleForTesting set
 
     var database: RemindersDatabase? = null
 

@@ -16,14 +16,13 @@
         android:gravity="center"
         android:orientation="vertical"
         tools:context="com.udacity.project4.view.reminderdetails.FragmentReminderDetails">
-        <!--TODO: add the design of the reminder details-->
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/reminder_details_guidelines"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintGuide_begin="150dp" />
+            app:layout_constraintGuide_begin="170dp" />
 
         <TextView
             android:id="@+id/reminder_details_title_header"
@@ -71,6 +70,78 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/reminder_details_guidelines"
             app:layout_constraintTop_toBottomOf="@+id/reminder_details_title"
+            tools:ignore="Autofill" />
+
+        <TextView
+            android:id="@+id/reminder_details_location_header"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/gap_16dp"
+            android:text="@string/reminder_location"
+            android:textSize="@dimen/text_16sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/reminder_details_location"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/reminder_details_location" />
+
+        <TextView
+            android:id="@+id/reminder_details_location"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/gap_16dp"
+            android:text="@={reminderItem.location}"
+            android:textSize="@dimen/text_16sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/reminder_details_guidelines"
+            app:layout_constraintTop_toBottomOf="@+id/reminder_details_desc"
+            tools:ignore="Autofill" />
+
+        <TextView
+            android:id="@+id/reminder_details_latitude_header"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/gap_16dp"
+            android:text="@string/reminder_lat"
+            android:textSize="@dimen/text_16sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/reminder_details_latitude"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/reminder_details_latitude" />
+
+        <TextView
+            android:id="@+id/reminder_details_latitude"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/gap_16dp"
+            android:text="@={`` + reminderItem.latitude}"
+            android:textSize="@dimen/text_16sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/reminder_details_guidelines"
+            app:layout_constraintTop_toBottomOf="@+id/reminder_details_location"
+            tools:ignore="Autofill" />
+
+        <TextView
+            android:id="@+id/reminder_details_longitude_header"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/gap_16dp"
+            android:text="@string/reminder_long"
+            android:textSize="@dimen/text_16sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/reminder_details_longitude"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/reminder_details_longitude" />
+
+        <TextView
+            android:id="@+id/reminder_details_longitude"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/gap_16dp"
+            android:text="@={`` + reminderItem.longitude}"
+            android:textSize="@dimen/text_16sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/reminder_details_guidelines"
+            app:layout_constraintTop_toBottomOf="@+id/reminder_details_latitude"
             tools:ignore="Autofill" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
