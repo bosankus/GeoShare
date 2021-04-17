@@ -40,11 +40,15 @@ class SaveReminderFragmentTest {
 
     @Test
     fun addReminder_addsReminderToLocal_returnsNoLocationSelected() {
+
         val title = "Sample location name"
         val description = "Sample description"
+
         onView(withId(R.id.reminderTitle)).perform(typeText(title))
         onView(withId(R.id.reminderDescription)).perform(typeText(description))
+
         Espresso.closeSoftKeyboard()
+
         onView(withId(R.id.saveReminder)).perform(click())
 
         // assert that snackbar is showing success message option

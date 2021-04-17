@@ -7,7 +7,6 @@ import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.MediumTest
 import com.udacity.project4.R
-import com.udacity.project4.data.local.FakeRemindersLocalRepositoryTest
 import com.udacity.project4.data.model.Reminder
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runBlockingTest
@@ -25,8 +24,6 @@ import org.junit.runner.RunWith
 @ExperimentalCoroutinesApi
 class FragmentReminderDetailsTest {
 
-    private val repositoryTest = FakeRemindersLocalRepositoryTest()
-
     @Test
     fun activeReminderDetails_DisplayInUi() = runBlockingTest {
 
@@ -38,8 +35,6 @@ class FragmentReminderDetailsTest {
             88.645856,
             "123456"
         )
-
-        repositoryTest.saveReminder(reminder)
 
         val bundle = FragmentReminderDetailsArgs(reminder).toBundle()
         launchFragmentInContainer<FragmentReminderDetails>(bundle, R.style.AppTheme)
