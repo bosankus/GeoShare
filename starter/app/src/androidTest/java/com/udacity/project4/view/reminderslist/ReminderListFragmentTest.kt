@@ -1,10 +1,12 @@
 package com.udacity.project4.view.reminderslist
 
+import android.app.Application
 import android.os.Bundle
 import androidx.fragment.app.testing.launchFragmentInContainer
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
+import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.contrib.RecyclerViewActions
@@ -12,12 +14,23 @@ import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.MediumTest
 import com.udacity.project4.R
-import com.udacity.project4.data.local.FakeRemindersLocalRepositoryTest
+import com.udacity.project4.data.local.LocalDB
+import com.udacity.project4.data.local.ReminderDataSource
+import com.udacity.project4.data.local.RemindersDao
+import com.udacity.project4.data.local.RemindersLocalRepository
 import com.udacity.project4.data.model.Reminder
+import com.udacity.project4.viewmodel.RemindersListViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.runBlockingTest
+import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.koin.androidx.viewmodel.dsl.viewModel
+import org.koin.core.context.loadKoinModules
+import org.koin.dsl.module
+import org.koin.test.AutoCloseKoinTest
+import org.koin.test.get
 import org.mockito.Mockito.mock
 import org.mockito.Mockito.verify
 
@@ -30,9 +43,24 @@ import org.mockito.Mockito.verify
 @RunWith(AndroidJUnit4::class)
 @MediumTest
 @ExperimentalCoroutinesApi
-class ReminderListFragmentTest {
+class ReminderListFragmentTest : AutoCloseKoinTest() {
 
-    private val repositoryTest = FakeRemindersLocalRepositoryTest()
+    private val appContext: Application = ApplicationProvider.getApplicationContext()
+    private lateinit var repository: ReminderDataSource
+    private lateinit var mockViewModel: RemindersListViewModel
+
+    private val testModule = module {
+        single { LocalDB.createRemindersDao(appContext) }
+
+        single { RemindersLocalRepository(get() as RemindersDao) }
+    }
+
+    @Before
+    fun setUp() {
+        mockViewModel = mock(RemindersListViewModel::class.java)
+        loadKoinModules(testModule)
+        repository = get() as RemindersLocalRepository
+    }
 
     @Test
     fun clickOnReminderListItem_navigatesToReminderDetailsFragment() = runBlockingTest {
@@ -55,8 +83,10 @@ class ReminderListFragmentTest {
             "2"
         )
 
-        repositoryTest.saveReminder(reminderOne)
-        repositoryTest.saveReminder(reminderTwo)
+        val job = launch {
+            repository.saveReminder(reminderOne)
+            repository.saveReminder(reminderTwo)
+        }
 
         val scenario = launchFragmentInContainer<ReminderListFragment>(Bundle(), R.style.AppTheme)
 
@@ -68,7 +98,7 @@ class ReminderListFragmentTest {
 
         onView(withId(R.id.reminderssRecyclerView)).perform(
             RecyclerViewActions.actionOnItem<RecyclerView.ViewHolder>(
-                hasDescendant(withText("ccd")), click()
+                hasDescendant(withText("Testing location One")), click()
             )
         )
 
@@ -77,5 +107,8 @@ class ReminderListFragmentTest {
                 reminderOne
             )
         )
+
+        job.cancel()
     }
+
 }

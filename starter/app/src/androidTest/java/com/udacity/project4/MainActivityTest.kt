@@ -6,6 +6,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
 import com.udacity.project4.data.local.LocalDB
 import com.udacity.project4.data.local.ReminderDataSource
+import com.udacity.project4.data.local.RemindersDao
 import com.udacity.project4.data.local.RemindersLocalRepository
 import com.udacity.project4.viewmodel.RemindersListViewModel
 import com.udacity.project4.viewmodel.SaveReminderViewModel
@@ -35,26 +36,24 @@ class MainActivityTest :
     @Before
     fun init() {
         stopKoin()//stop the original app koin
+
         appContext = getApplicationContext()
+
         val myModule = module {
-            viewModel {
-                RemindersListViewModel(
-                    get() as RemindersLocalRepository
-                )
-            }
-            single {
-                SaveReminderViewModel(
-                    appContext,
-                    get() as RemindersLocalRepository
-                )
-            }
-            single { RemindersLocalRepository(get()) }
+            viewModel { RemindersListViewModel(get() as RemindersLocalRepository) }
+
+            single { SaveReminderViewModel(appContext, get() as RemindersLocalRepository) }
+
             single { LocalDB.createRemindersDao(appContext) }
+
+            single { RemindersLocalRepository(get() as RemindersDao) }
         }
+
         //declare a new koin module
         startKoin {
             modules(listOf(myModule))
         }
+
         //Get our real repository
         repository = get()
 

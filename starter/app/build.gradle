@@ -19,8 +19,8 @@ android {
         versionCode 1
         versionName "1.0"
         multiDexEnabled true
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        /*testInstrumentationRunner "com.udacity.project4.androidTest.KoinTestRunner"*/
+        /*testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"*/
+        testInstrumentationRunner "com.udacity.project4.AndroidTestRunner"
     }
     buildTypes {
         release {
@@ -70,28 +70,10 @@ dependencies {
     implementation "androidx.appcompat:appcompat:$appCompatVersion"
     implementation "androidx.legacy:legacy-support-v4:$androidXLegacySupport"
     implementation "androidx.annotation:annotation:$androidXAnnotations"
-
     implementation "androidx.cardview:cardview:$cardVersion"
     implementation "com.google.android.material:material:$materialVersion"
     implementation "androidx.recyclerview:recyclerview:$recyclerViewVersion"
     implementation "androidx.constraintlayout:constraintlayout:$constraintVersion"
-
-    // Truth
-    testImplementation "com.google.truth:truth:1.1.2"
-    androidTestImplementation "com.google.truth:truth:1.1.2"
-
-
-    // Timber
-    implementation 'com.jakewharton.timber:timber:4.7.1'
-
-    // Architecture Components
-    //Navigation dependencies
-    implementation 'androidx.appcompat:appcompat:1.2.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.0-beta01'
-    //noinspection LifecycleAnnotationProcessorWithJava8
-    implementation "androidx.navigation:navigation-fragment-ktx:$navigationVersion"
-    implementation "androidx.navigation:navigation-ui-ktx:$navigationVersion"
-    implementation "androidx.test.espresso:espresso-idling-resource:$espressoVersion"
 
     // Dependencies for local unit tests
     testImplementation "junit:junit:$junitVersion"
@@ -102,6 +84,7 @@ dependencies {
     testImplementation "org.robolectric:robolectric:$robolectricVersion"
     testImplementation "org.robolectric:annotations:$robolectricVersion"
     testImplementation "org.mockito:mockito-core:$mockitoVersion"
+    testImplementation "com.google.truth:truth:1.1.2"
 
     // AndroidX Test - JVM testing
     testImplementation "androidx.test:core-ktx:$androidXTestCoreVersion"
@@ -126,6 +109,21 @@ dependencies {
     androidTestImplementation "org.mockito:mockito-core:$mockitoVersion"
     androidTestImplementation "com.linkedin.dexmaker:dexmaker-mockito:$dexMakerVersion"
     androidTestImplementation('org.koin:koin-test:2.0.1') { exclude group: 'org.mockito' }
+    androidTestImplementation "com.google.truth:truth:1.1.2"
+    androidTestImplementation 'com.android.support.test:rules:1.0.2'
+
+
+    // Timber
+    implementation 'com.jakewharton.timber:timber:4.7.1'
+
+    // Architecture Components
+    //Navigation dependencies
+    implementation 'androidx.appcompat:appcompat:1.2.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.0-beta01'
+    //noinspection LifecycleAnnotationProcessorWithJava8
+    implementation "androidx.navigation:navigation-fragment-ktx:$navigationVersion"
+    implementation "androidx.navigation:navigation-ui-ktx:$navigationVersion"
+    implementation "androidx.test.espresso:espresso-idling-resource:$espressoVersion"
 
     // Lifecycle & viewModel
     //noinspection LifecycleAnnotationProcessorWithJava8
