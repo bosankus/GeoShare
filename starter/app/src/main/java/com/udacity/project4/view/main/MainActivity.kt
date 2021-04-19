@@ -11,15 +11,11 @@ import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.LocationSettingsRequest
-import com.udacity.project4.NavGraphDirections
 import com.udacity.project4.R
-import com.udacity.project4.data.model.Reminder
 import com.udacity.project4.databinding.ActivityMainBinding
-import com.udacity.project4.utils.*
-import com.udacity.project4.view.reminderdetails.FragmentReminderDetailsArgs
-import com.udacity.project4.view.reminderslist.ReminderListFragmentDirections
-import com.udacity.project4.view.splash.SplashFragmentDirections
-import timber.log.Timber
+import com.udacity.project4.utils.AuthManager
+import com.udacity.project4.utils.REQUEST_TURN_DEVICE_LOCATION_ON
+import com.udacity.project4.utils.showSnack
 
 /**
  * The RemindersActivity that holds the reminders fragments
@@ -38,8 +34,6 @@ class MainActivity : AppCompatActivity() {
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment)
                 as NavHostFragment
         navController = navHostFragment.navController
-
-        navigateToReminderDetailsFragmentWhenNeeded(intent)
 
         authManager = AuthManager(this)
     }
@@ -100,26 +94,6 @@ class MainActivity : AppCompatActivity() {
     override fun onStart() {
         super.onStart()
         checkDeviceLocationSettings()
-    }
-
-
-    override fun onNewIntent(intent: Intent?) {
-        super.onNewIntent(intent)
-        navigateToReminderDetailsFragmentWhenNeeded(intent)
-    }
-
-
-    private fun navigateToReminderDetailsFragmentWhenNeeded(intent: Intent?) {
-        intent?.let {
-            if (it.action == ACTION_DETAILS_FRAGMENT) {
-                try {
-                    val extras = it.extras?.get(EXTRA_ReminderDataItem) as Bundle
-                    navController.navigate(R.id.action_global_reminderDetailsFragment, extras)
-                } catch (e: Exception) {
-                    Timber.i("$e")
-                }
-            }
-        }
     }
 }
 

@@ -2,20 +2,15 @@ package com.udacity.project4.utils
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
-import android.app.PendingIntent
 import android.content.Context
-import android.content.Intent
 import android.graphics.Color
 import android.os.Build
 import androidx.core.app.NotificationCompat
-import androidx.core.app.TaskStackBuilder
+import androidx.navigation.NavDeepLinkBuilder
 import com.udacity.project4.BuildConfig
 import com.udacity.project4.R
 import com.udacity.project4.data.model.Reminder
-import com.udacity.project4.view.main.MainActivity
-import com.udacity.project4.view.reminderdetails.FragmentReminderDetails
-import com.udacity.project4.view.reminderslist.ReminderDataItem
-import timber.log.Timber
+import com.udacity.project4.view.reminderdetails.FragmentReminderDetailsArgs
 
 /** This object was created to send notification */
 
@@ -42,20 +37,18 @@ fun sendNotifications(context: Context, reminderDataItem: Reminder) {
         notificationManager.createNotificationChannel(channel)
     }
 
-    val pendingIntent = PendingIntent.getActivity(
-        context.applicationContext, getUniqueId(),
-        Intent(context.applicationContext, MainActivity::class.java).also {
-            it.action = ACTION_DETAILS_FRAGMENT
-            it.putExtra(EXTRA_ReminderDataItem, reminderDataItem)
-        }, PendingIntent.FLAG_UPDATE_CURRENT
-    )
+    val args = FragmentReminderDetailsArgs(reminderDataItem).toBundle()
+    val abc = NavDeepLinkBuilder(context)
+        .setGraph(R.navigation.nav_graph)
+        .setDestination(R.id.fragmentReminderDetails)
+        .setArguments(args)
+        .createPendingIntent()
 
-    // build the notification object with the data to be shown
     val notification = NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_ID)
         .setSmallIcon(R.mipmap.ic_launcher)
         .setContentTitle(reminderDataItem.title)
         .setContentText(reminderDataItem.location)
-        .setContentIntent(pendingIntent)
+        .setContentIntent(abc)
         .setAutoCancel(true)
         .build()
 
