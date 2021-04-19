@@ -15,7 +15,7 @@ import org.koin.android.ext.android.inject
 
 class ReminderListFragment : Fragment() {
 
-    val _viewModel by inject<RemindersListViewModel>()
+    private val _viewModel: RemindersListViewModel by inject()
     private var binding: FragmentRemindersBinding? = null
     private lateinit var authManager: AuthManager
 

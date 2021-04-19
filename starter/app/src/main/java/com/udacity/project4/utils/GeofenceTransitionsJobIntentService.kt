@@ -8,6 +8,7 @@ import com.udacity.project4.data.local.RemindersLocalRepository
 import com.udacity.project4.data.model.Reminder
 import kotlinx.coroutines.*
 import org.koin.android.ext.android.inject
+import org.koin.core.KoinComponent
 import timber.log.Timber
 import kotlin.coroutines.CoroutineContext
 
@@ -17,7 +18,10 @@ import kotlin.coroutines.CoroutineContext
  *  Geofence Transition events
  * */
 
-class GeofenceTransitionsJobIntentService : JobIntentService(), CoroutineScope {
+class GeofenceTransitionsJobIntentService : JobIntentService(), CoroutineScope,
+    KoinComponent {
+
+    private val remindersLocalRepository by inject<RemindersLocalRepository>()
 
     private var coroutineJob: Job = Job()
     override val coroutineContext: CoroutineContext
@@ -41,7 +45,6 @@ class GeofenceTransitionsJobIntentService : JobIntentService(), CoroutineScope {
     }
 
     private fun sendNotification(reminderId: String) {
-        val remindersLocalRepository: RemindersLocalRepository by inject()
         CoroutineScope(coroutineContext).launch(SupervisorJob()) {
             val result = remindersLocalRepository.getReminder(reminderId)
 

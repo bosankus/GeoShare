@@ -19,18 +19,22 @@ class MyApp : Application() {
 
         val viewModelModule = module {
 
-            viewModel { RemindersListViewModel(get() as ReminderDataSource) }
-            single { SaveReminderViewModel(get(), get() as ReminderDataSource) }
-
             single { RemindersLocalRepository(get()) as ReminderDataSource }
-            single { LocalDB.createRemindersDao(this@MyApp) }
+            factory { LocalDB.createRemindersDao(androidContext()) }
 
+            viewModel { RemindersListViewModel(get() as ReminderDataSource) }
+            viewModel { SaveReminderViewModel(get(), get() as ReminderDataSource) }
+
+        }
+
+        val serviceModule = module {
+            single { RemindersLocalRepository(get())}
         }
 
         startKoin {
             androidContext(this@MyApp)
             androidLogger()
-            modules(listOf(viewModelModule))
+            modules(listOf(viewModelModule, serviceModule))
         }
     }
 }
