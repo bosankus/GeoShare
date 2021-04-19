@@ -6,6 +6,7 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.google.common.truth.Truth.assertThat
+import com.udacity.project4.MainCoroutineRule
 import com.udacity.project4.R
 import com.udacity.project4.data.model.Reminder
 import com.udacity.project4.getOrAwaitValueTest
@@ -34,50 +35,26 @@ class SaveReminderViewModelTest {
     private val context = ApplicationProvider.getApplicationContext<Context>()
 
     @get:Rule
+    var mainCoroutineRule = MainCoroutineRule()
+
+    @get:Rule
     var instantTaskExecutorRule = InstantTaskExecutorRule()
 
     lateinit var viewModel: SaveReminderViewModel
 
     @Before
     fun setUp() {
-
         viewModel =
             SaveReminderViewModel(ApplicationProvider.getApplicationContext(), FakeDataSource())
     }
 
-    @After
-    fun tearDown() {
-        stopKoin()
-    }
-
-    @Test
-    fun saveReminder_saveReminderListToLocal_returnsTrue() = runBlockingTest {
-
-        val reminder = Reminder(
-            "Testing location",
-            "Sample descriptio",
-            "location name",
-            22.647596,
-            88.645856,
-            "123456"
-        )
-
-        viewModel.validateAndSaveReminder(reminder)
-
-        val value = viewModel.isReminderSaved.getOrAwaitValueTest()
-
-        val isLoading = viewModel.showLoading.getOrAwaitValueTest()
-
-        assertThat(isLoading).isFalse()
-        assertThat(value).isTrue()
-    }
 
     @Test
     fun saveReminder_saveReminderListToLocal_returnsEmptyTitle() = runBlockingTest {
 
         val reminder = Reminder(
             "",
-            "Sample descriptio",
+            "Sample description",
             "location name",
             22.647596,
             88.645856,
@@ -96,7 +73,7 @@ class SaveReminderViewModelTest {
 
         val reminder = Reminder(
             "sample title",
-            "Sample descriptio",
+            "Sample description",
             "location name",
             0.0,
             88.645856,
@@ -108,5 +85,35 @@ class SaveReminderViewModelTest {
         val value = viewModel.showMessage.getOrAwaitValueTest()
 
         assertThat(value).contains(context.resources.getString(R.string.select_location))
+    }
+
+
+    @Test
+    fun saveReminder_saveReminderListToLocal_returnsTrue() = runBlockingTest {
+
+        val reminder = Reminder(
+            "Testing location",
+            "Sample description",
+            "location name",
+            22.647596,
+            88.645856,
+            "123456"
+        )
+
+        mainCoroutineRule.testDispatcher.pauseDispatcher()
+        viewModel.validateAndSaveReminder(reminder)
+
+
+        assertThat(viewModel.showLoading.getOrAwaitValueTest()).isTrue()
+        mainCoroutineRule.testDispatcher.resumeDispatcher()
+        assertThat(viewModel.showLoading.getOrAwaitValueTest()).isFalse()
+
+        assertThat(viewModel.isReminderSaved.getOrAwaitValueTest()).isTrue()
+    }
+
+
+    @After
+    fun tearDown() {
+        stopKoin()
     }
 }

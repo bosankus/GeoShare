@@ -26,7 +26,6 @@ import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.context.loadKoinModules
 import org.koin.dsl.module
 import org.koin.test.AutoCloseKoinTest
@@ -46,12 +45,11 @@ import org.mockito.Mockito.verify
 class ReminderListFragmentTest : AutoCloseKoinTest() {
 
     private val appContext: Application = ApplicationProvider.getApplicationContext()
-    private lateinit var repository: ReminderDataSource
     private lateinit var mockViewModel: RemindersListViewModel
+    private lateinit var repository: ReminderDataSource
 
     private val testModule = module {
         single { LocalDB.createRemindersDao(appContext) }
-
         single { RemindersLocalRepository(get() as RemindersDao) }
     }
 
